@@ -1,0 +1,11 @@
+services:
+  gridmind:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: "file:/data/gridmind.db"
+    volumes:
+      - gridmind-data:/data
+volumes:
+  gridmind-data:
