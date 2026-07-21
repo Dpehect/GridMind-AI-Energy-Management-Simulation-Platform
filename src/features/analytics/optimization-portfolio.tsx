@@ -1,8 +1,0 @@
-import { CircleDollarSign, Leaf, Zap } from "lucide-react";
-import { SectionCard } from "@/components/ui/section-card";
-export function OptimizationPortfolio({result}:{result:any}){
- return <SectionCard title="Optimization portfolio" description="Best local action portfolio under the current implementation budget.">
-  <div className="grid gap-4 md:grid-cols-4"><div className="rounded-2xl bg-muted p-4"><CircleDollarSign className="size-5 text-primary"/><p className="mt-3 text-xs text-muted-foreground">Budget used</p><p className="text-xl font-semibold">₺{result.spent.toLocaleString()}</p></div><div className="rounded-2xl bg-muted p-4"><CircleDollarSign className="size-5 text-primary"/><p className="mt-3 text-xs text-muted-foreground">Annual savings</p><p className="text-xl font-semibold">₺{result.annualSavingsCost.toLocaleString()}</p></div><div className="rounded-2xl bg-muted p-4"><Zap className="size-5 text-primary"/><p className="mt-3 text-xs text-muted-foreground">Energy saved</p><p className="text-xl font-semibold">{result.annualSavingsKwh.toLocaleString()} kWh</p></div><div className="rounded-2xl bg-muted p-4"><Leaf className="size-5 text-primary"/><p className="mt-3 text-xs text-muted-foreground">Carbon saved</p><p className="text-xl font-semibold">{result.carbonSavedKg.toLocaleString()} kg</p></div></div>
-  <div className="mt-4 grid gap-3 md:grid-cols-2">{result.selected.map((a:any)=><article key={a.id} className="rounded-2xl border border-border p-4"><p className="font-medium">{a.title}</p><p className="mt-1 text-xs text-muted-foreground">{a.category} · {a.paybackMonths} month payback · {Math.round(a.confidence*100)}% confidence</p></article>)}</div>
- </SectionCard>
-}

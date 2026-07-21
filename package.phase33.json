@@ -1,7 +1,0 @@
-{
-  "scripts": {
-    "diagnostics:run": "tsx scripts/run-diagnostics.ts",
-    "logs:rotate": "tsx scripts/rotate-logs.ts",
-    "logs:export": "tsx scripts/export-observability.ts"
-  }
-}

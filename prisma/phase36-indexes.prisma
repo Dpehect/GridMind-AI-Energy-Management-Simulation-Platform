@@ -1,0 +1,32 @@
+// Review and merge the following indexes into prisma/schema.prisma.
+
+model Reading {
+  @@index([meterId, capturedAt])
+  @@index([capturedAt, value])
+}
+
+model WorkOrder {
+  @@index([buildingId, status, priority])
+  @@index([startsAt, endsAt])
+  @@index([deviceId, status])
+}
+
+model InventoryMovement {
+  @@index([workspaceId, createdAt])
+  @@index([inventoryItemId, createdAt])
+  @@index([workOrderId, createdAt])
+}
+
+model BackgroundJob {
+  @@index([status, runAt, priority])
+  @@index([workspaceId, status, createdAt])
+}
+
+model RuntimeLog {
+  @@index([workspaceId, level, createdAt])
+  @@index([category, createdAt])
+}
+
+model SystemMetric {
+  @@index([workspaceId, key, capturedAt])
+}

@@ -1,7 +1,0 @@
-{
-  "scripts": {
-    "db:backup:v2": "tsx scripts/backup-database-v2.ts",
-    "db:verify-backups": "tsx scripts/verify-backups.ts",
-    "audit:integrity": "tsx scripts/check-audit-gaps.ts"
-  }
-}

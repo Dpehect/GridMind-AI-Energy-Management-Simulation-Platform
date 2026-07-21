@@ -1,5 +1,0 @@
-{
-  "scripts": {
-    "db:seed:tenancy": "tsx prisma/seed-tenancy.ts"
-  }
-}

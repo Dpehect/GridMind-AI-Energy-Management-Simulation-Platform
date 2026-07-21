@@ -1,0 +1,109 @@
+services:
+  gridmind:
+    build:
+      context: .
+      dockerfile: Dockerfile.enterprise
+    image: gridmind:1.0.0
+    restart: unless-stopped
+    init: true
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: file:/data/gridmind.db
+      GRIDMIND_ENABLE_DEMO_USERS: "false"
+      GRIDMIND_LOG_LEVEL: info
+      GRIDMIND_BACKUP_DIR: /backups
+      GRIDMIND_RUNTIME_LOG_DAYS: "30"
+      GRIDMIND_METRIC_DAYS: "14"
+      GRIDMIND_DIAGNOSTIC_DAYS: "90"
+      GRIDMIND_WORKER_MAX_JOBS: "100"
+      GRIDMIND_CSRF_SECRET: ${GRIDMIND_CSRF_SECRET}
+      GRIDMIND_BOOTSTRAP_ADMIN_EMAIL: ${GRIDMIND_BOOTSTRAP_ADMIN_EMAIL:-}
+      GRIDMIND_BOOTSTRAP_ADMIN_PASSWORD: ${GRIDMIND_BOOTSTRAP_ADMIN_PASSWORD:-}
+      NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:-http://localhost}
+    ports:
+      - "3000:3000"
+    volumes:
+      - gridmind-data:/data
+      - gridmind-backups:/backups
+      - gridmind-logs:/logs
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/api/health/ready"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 45s
+    stop_grace_period: 30s
+    networks:
+      - gridmind-internal
+
+  worker:
+    image: gridmind:1.0.0
+    restart: unless-stopped
+    init: true
+    command: ["node", "scripts/worker-loop.mjs"]
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: file:/data/gridmind.db
+      GRIDMIND_WORKER_MAX_JOBS: "100"
+      GRIDMIND_WORKER_IDLE_MS: "5000"
+      GRIDMIND_LOG_LEVEL: info
+    volumes:
+      - gridmind-data:/data
+      - gridmind-backups:/backups
+      - gridmind-logs:/logs
+    depends_on:
+      gridmind:
+        condition: service_healthy
+    stop_grace_period: 30s
+    networks:
+      - gridmind-internal
+
+  scheduler:
+    image: gridmind:1.0.0
+    restart: unless-stopped
+    init: true
+    command: ["node", "scripts/scheduler-loop.mjs"]
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: file:/data/gridmind.db
+      GRIDMIND_SCHEDULER_INTERVAL_MS: "60000"
+      GRIDMIND_LOG_LEVEL: info
+    volumes:
+      - gridmind-data:/data
+      - gridmind-backups:/backups
+      - gridmind-logs:/logs
+    depends_on:
+      gridmind:
+        condition: service_healthy
+    stop_grace_period: 30s
+    networks:
+      - gridmind-internal
+
+  backup:
+    image: gridmind:1.0.0
+    restart: unless-stopped
+    init: true
+    command: ["node", "scripts/backup-loop.mjs"]
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: file:/data/gridmind.db
+      GRIDMIND_BACKUP_DIR: /backups
+      GRIDMIND_BACKUP_INTERVAL_MS: "86400000"
+      GRIDMIND_BACKUP_RETENTION_DAYS: "14"
+    volumes:
+      - gridmind-data:/data
+      - gridmind-backups:/backups
+    depends_on:
+      gridmind:
+        condition: service_healthy
+    networks:
+      - gridmind-internal
+
+volumes:
+  gridmind-data:
+  gridmind-backups:
+  gridmind-logs:
+
+networks:
+  gridmind-internal:
+    driver: bridge

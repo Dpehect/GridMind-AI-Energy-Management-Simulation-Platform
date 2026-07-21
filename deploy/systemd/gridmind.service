@@ -1,0 +1,26 @@
+[Unit]
+Description=GridMind Enterprise
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/gridmind
+EnvironmentFile=/etc/gridmind/gridmind.env
+ExecStartPre=/usr/bin/npm run db:generate
+ExecStartPre=/usr/bin/npm run db:push
+ExecStart=/usr/bin/npm start
+Restart=always
+RestartSec=5
+User=gridmind
+Group=gridmind
+TimeoutStopSec=30
+KillSignal=SIGTERM
+
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+ReadWritePaths=/var/lib/gridmind /var/backups/gridmind /var/log/gridmind
+
+[Install]
+WantedBy=multi-user.target

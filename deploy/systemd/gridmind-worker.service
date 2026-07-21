@@ -1,0 +1,19 @@
+[Unit]
+Description=GridMind Background Worker
+After=gridmind.service
+Requires=gridmind.service
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/gridmind
+EnvironmentFile=/etc/gridmind/gridmind.env
+ExecStart=/usr/bin/node scripts/worker-loop.mjs
+Restart=always
+RestartSec=5
+User=gridmind
+Group=gridmind
+TimeoutStopSec=30
+KillSignal=SIGTERM
+
+[Install]
+WantedBy=multi-user.target
