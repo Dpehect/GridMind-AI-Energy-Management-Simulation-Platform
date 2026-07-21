@@ -36,3 +36,7 @@ npm run build
 - Architecture, security, contribution and setup documentation
 
 No API key, hosted database, or third-party account is required.
+
+## Phase 02
+
+Open `/design-system` inside the application shell to review GridMind's component language, responsive states, operational metrics and accessibility patterns.

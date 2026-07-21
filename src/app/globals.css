@@ -61,3 +61,22 @@
 html { scroll-behavior: smooth; }
 body { background: var(--background); color: var(--foreground); text-rendering: optimizeLegibility; }
 ::selection { background: color-mix(in oklab, var(--primary) 30%, transparent); }
+
+:root {
+  --chart-energy: oklch(0.66 0.15 166);
+  --chart-cost: oklch(0.67 0.14 80);
+  --chart-carbon: oklch(0.62 0.12 220);
+  --chart-warning: oklch(0.75 0.16 75);
+  --chart-critical: oklch(0.64 0.2 25);
+  --surface-raised: color-mix(in oklab, var(--card) 92%, white);
+}
+.dark { --surface-raised: color-mix(in oklab, var(--card) 92%, black); }
+:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
