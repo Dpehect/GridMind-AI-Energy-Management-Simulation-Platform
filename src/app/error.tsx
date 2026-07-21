@@ -1,3 +1,0 @@
-"use client";
-import { Button } from "@/components/ui/button";
-export default function GlobalError({ reset }: { error: Error & { digest?: string }; reset: () => void }) { return <div className="grid min-h-screen place-items-center px-4"><div className="max-w-md text-center"><p className="text-sm font-medium text-primary">GridMind recovery</p><h1 className="mt-3 text-3xl font-semibold">The view could not be loaded.</h1><p className="mt-3 text-muted-foreground">Your local data remains unchanged. Retry the current operation.</p><Button className="mt-6" onClick={reset}>Try again</Button></div></div>; }
