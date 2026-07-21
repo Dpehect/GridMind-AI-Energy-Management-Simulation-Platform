@@ -1,0 +1,88 @@
+// Merge into prisma/schema.prisma.
+
+model Organization {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  workspaces  Workspace[]
+  memberships OrganizationMembership[]
+}
+
+model OrganizationMembership {
+  id             String   @id @default(cuid())
+  organizationId String
+  userId         String
+  role           String
+  active         Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user         LocalUser    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, userId])
+  @@index([userId, active])
+}
+
+model WorkspaceMembership {
+  id          String   @id @default(cuid())
+  workspaceId String
+  userId      String
+  role        String
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  user      LocalUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([workspaceId, userId])
+  @@index([userId, active])
+}
+
+model BuildingAccess {
+  id          String   @id @default(cuid())
+  workspaceId String
+  buildingId  String
+  userId      String
+  accessLevel String
+  createdAt   DateTime @default(now())
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  building  Building  @relation(fields: [buildingId], references: [id], onDelete: Cascade)
+  user      LocalUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([buildingId, userId])
+  @@index([workspaceId, userId])
+}
+
+model WorkspaceFeatureFlag {
+  id          String   @id @default(cuid())
+  workspaceId String
+  key         String
+  enabled     Boolean  @default(false)
+  config      Json?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@unique([workspaceId, key])
+}
+
+model WorkspaceLocale {
+  id          String   @id @default(cuid())
+  workspaceId String   @unique
+  locale      String   @default("tr-TR")
+  timezone    String   @default("Europe/Istanbul")
+  currency    String   @default("TRY")
+  unitSystem  String   @default("metric")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+}

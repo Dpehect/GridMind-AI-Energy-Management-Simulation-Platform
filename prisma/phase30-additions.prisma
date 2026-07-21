@@ -1,0 +1,29 @@
+// Merge these additions into prisma/schema.prisma.
+
+model LoginAttempt {
+  id         String   @id @default(cuid())
+  email      String
+  ipAddress  String?
+  userAgent  String?
+  successful Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  @@index([email, createdAt])
+  @@index([ipAddress, createdAt])
+}
+
+model SecurityEvent {
+  id          String   @id @default(cuid())
+  workspaceId String?
+  userId      String?
+  type        String
+  severity    String
+  ipAddress   String?
+  userAgent   String?
+  metadata    Json?
+  createdAt   DateTime @default(now())
+
+  @@index([workspaceId, createdAt])
+  @@index([userId, createdAt])
+  @@index([type, severity, createdAt])
+}
