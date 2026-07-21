@@ -1,6 +1,6 @@
 {
   "name": "gridmind",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": true,
   "description": "Local-first energy management and simulation platform.",
   "scripts": {
@@ -11,7 +11,15 @@
     "typecheck": "tsc --noEmit",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "check": "npm run typecheck && npm run lint && npm run format:check"
+    "check": "npm run typecheck && npm run lint && npm run format:check",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:push": "prisma db push",
+    "db:seed": "tsx prisma/seed.ts",
+    "db:studio": "prisma studio",
+    "db:backup": "tsx scripts/backup-database.ts",
+    "db:restore": "tsx scripts/restore-database.ts",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@hookform/resolvers": "latest",
@@ -36,7 +44,8 @@
     "tailwind-merge": "latest",
     "vaul": "latest",
     "zod": "latest",
-    "zustand": "latest"
+    "zustand": "latest",
+    "@prisma/client": "6.16.3"
   },
   "devDependencies": {
     "@eslint/eslintrc": "latest",
@@ -50,9 +59,14 @@
     "prettier": "latest",
     "prettier-plugin-tailwindcss": "latest",
     "tailwindcss": "latest",
-    "typescript": "latest"
+    "typescript": "latest",
+    "prisma": "6.16.3",
+    "tsx": "4.20.5"
   },
   "engines": {
     "node": ">=20.9.0"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
   }
 }

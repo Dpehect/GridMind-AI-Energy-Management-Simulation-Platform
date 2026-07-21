@@ -1,0 +1,2 @@
+-- Phase 04 initial local-first domain migration.
+-- Generated from prisma/schema.prisma. Run `npm run db:migrate` after installation.

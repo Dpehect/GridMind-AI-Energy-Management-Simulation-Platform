@@ -1,17 +1,17 @@
 {
   "project": "GridMind",
-  "phase": "03 \u2014 Marketing Experience",
-  "version": "0.3.0",
+  "phase": "04 \u2014 Local Database & Domain Model",
+  "version": "0.4.0",
   "generated_at": "2026-07-21",
-  "data_mode": "local",
+  "data_mode": "local-sqlite",
   "external_api_keys_required": false,
-  "file_count": 87,
-  "source_bytes": 67511,
+  "file_count": 103,
+  "source_bytes": 88986,
   "files": [
     {
       "path": ".env.example",
-      "bytes": 97,
-      "sha256": "69e2e57aa09499476a3acecc07e950879c36c232d41705401505120f67eba938"
+      "bytes": 194,
+      "sha256": "b76543971e219678fda1c14657962c6c0263bfbed16a39fd0ad8ec4aa3502531"
     },
     {
       "path": ".gitignore",
@@ -35,8 +35,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 586,
-      "sha256": "22df8500de9db42c52a5b150b4a838163b1f8fe73d394eec44aaa97e0f6bd186"
+      "bytes": 682,
+      "sha256": "0e3dff161e9979b9d4a73d5c6a4f1ee39e8d1e56faf0a14a703fb6b0898a23ca"
     },
     {
       "path": "CONTRIBUTING.md",
@@ -50,13 +50,18 @@
     },
     {
       "path": "README.md",
-      "bytes": 505,
-      "sha256": "5cda487d498e19bd18b1bdf38b3f7d007dc2ae50088062237e961106a4b6f94d"
+      "bytes": 851,
+      "sha256": "bea872f01d1b0d3704aa6c9a5b358c0c44b73d8accbd4cefd46b426fbce868ea"
     },
     {
       "path": "SECURITY.md",
       "bytes": 390,
       "sha256": "fb125c07bcabb8815841ce4d996c899620dd71c0fef3714d422bc4f983f68ddd"
+    },
+    {
+      "path": "backups/.gitkeep",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     },
     {
       "path": "components.json",
@@ -74,9 +79,24 @@
       "sha256": "98712f2a49ee3284b98fa1bbf519e8949573b1e370b75a9c417791304b9d0c6d"
     },
     {
+      "path": "docs/adr/0002-sqlite-prisma-domain-layer.md",
+      "bytes": 509,
+      "sha256": "8e9480758858ec67a15e8e0ba3ed8afa697b344149dbb7c2571a6e4dd679fad9"
+    },
+    {
       "path": "docs/coding-standards.md",
       "bytes": 312,
       "sha256": "96e7157ebb8818177f2fb782e650c24f09b0d1108740cc8b0b5905a1a4fffcdc"
+    },
+    {
+      "path": "docs/data/backup-restore.md",
+      "bytes": 390,
+      "sha256": "9ca90a140eaa0afd0bd16bdd8c6a6e0a0de4dddcd9e20c27fda962563d360b4d"
+    },
+    {
+      "path": "docs/data/domain-model.md",
+      "bytes": 700,
+      "sha256": "fb579ba04c875e3675b2a1605abe7b33b5b2f761e63fdd3faf6488fbc1173e5c"
     },
     {
       "path": "docs/design-principles.md",
@@ -125,13 +145,38 @@
     },
     {
       "path": "package.json",
-      "bytes": 1631,
-      "sha256": "1299fb04c40d328afa75ed11d5a7840fd97edcfe9449d5be8f9dc9f2575fbbea"
+      "bytes": 2084,
+      "sha256": "59f63c06a1a112ead0b35bd4df1600d0768fdc9cf2d1f7983579b6ed2cbef3ed"
     },
     {
       "path": "postcss.config.mjs",
       "bytes": 68,
       "sha256": "65572d5fde836180cba54e1ac6ff1ec309ef6aa925662e9cd04b32b53c5bee35"
+    },
+    {
+      "path": "prisma/migrations/20260721210000_phase04_domain_model/migration.sql",
+      "bytes": 135,
+      "sha256": "6d3acaf1888817e24768210b9a492c2e1826d85519ea823bfd2d73b3ada75928"
+    },
+    {
+      "path": "prisma/schema.prisma",
+      "bytes": 9375,
+      "sha256": "fc34fa4d1a8c61938c43f87c7b67450a076a35a2ffd2d6e3317e4270ad961b80"
+    },
+    {
+      "path": "prisma/seed.ts",
+      "bytes": 4296,
+      "sha256": "182c9bb46314d6143eac0121c513b0be8c338dfbb6076ce7e3832e18d17bf7f8"
+    },
+    {
+      "path": "scripts/backup-database.ts",
+      "bytes": 535,
+      "sha256": "d71789938c4649db4048d5529ebdf29e5aa7dd505d7ca863249f658933f6940d"
+    },
+    {
+      "path": "scripts/restore-database.ts",
+      "bytes": 469,
+      "sha256": "6444a84569b6545b8f150fb7197a26593e278a06577990c2ef02653bff5cfd7d"
     },
     {
       "path": "src/app/(app)/dashboard/layout.tsx",
@@ -147,6 +192,11 @@
       "path": "src/app/(app)/design-system/page.tsx",
       "bytes": 4307,
       "sha256": "eb77a70a3cc67dbc62c3b58dafb25d6617aad02c0c2f366cf54f40aaace7645e"
+    },
+    {
+      "path": "src/app/api/system/database-health/route.ts",
+      "bytes": 372,
+      "sha256": "c790c97496a3c9d12c849ea69fa5e9c72b1d3f476c7f665f85adb230557ef006"
     },
     {
       "path": "src/app/error.tsx",
@@ -419,9 +469,44 @@
       "sha256": "5e99314d02029a94b39a21799b5c4f8480ad308bbe17e93ed1e300f17522b44d"
     },
     {
+      "path": "src/lib/db/client.ts",
+      "bytes": 344,
+      "sha256": "aa9d363191cc10d6f3144de306abbde52b8f5466cb99a7efedb21c7a924b457d"
+    },
+    {
+      "path": "src/lib/db/repositories/building-repository.ts",
+      "bytes": 612,
+      "sha256": "f788e6c7e27244293031e9a07fc4996a814ac5b2f3170dc9a249e725d3674e7b"
+    },
+    {
+      "path": "src/lib/db/repositories/reading-repository.ts",
+      "bytes": 378,
+      "sha256": "51ecb57da39ca1f2b25e1cf29c10f2d0a7b87649ebe6bea5e34dc5a91717d469"
+    },
+    {
+      "path": "src/lib/db/repositories/workspace-repository.ts",
+      "bytes": 579,
+      "sha256": "a96de63702ce4ee39a514e6c59e01c2ef7456f421cdde98337733a5f9b6e16ec"
+    },
+    {
+      "path": "src/lib/db/services/building-service.ts",
+      "bytes": 718,
+      "sha256": "0033b6f3883135e705564f880256444fad5d8682b080690943d3d9b29a770634"
+    },
+    {
+      "path": "src/lib/db/services/database-health-service.ts",
+      "bytes": 635,
+      "sha256": "27516d5e90453dacc4cfbd2b44656eea61ccd04257cab8372bc71b36cebf1a65"
+    },
+    {
       "path": "src/lib/design-tokens.ts",
       "bytes": 469,
       "sha256": "809e2b0a4769ea10bfc30a18b3f099ab40913a5943c1312149415eda9854c75d"
+    },
+    {
+      "path": "src/lib/domain/entities.ts",
+      "bytes": 436,
+      "sha256": "6f162d0a94fa1dd49b1804833317c93a2bf3f76a29c99ce9c505eecb1bf3a300"
     },
     {
       "path": "src/lib/env.ts",

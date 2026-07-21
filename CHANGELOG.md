@@ -1,17 +1,22 @@
 # Changelog
 
+## 0.4.0 — Phase 04
+
+- Added Prisma and zero-account SQLite persistence.
+- Added the complete GridMind energy operations domain model.
+- Added deterministic campus seed data and 72 hourly meter readings.
+- Added repository and service boundaries for typed data access.
+- Added database health endpoint plus local backup and restore scripts.
+- Added domain-model, persistence and operational documentation.
+
 ## 0.3.0 — Phase 03
 
-- Rebuilt the public marketing experience with a complete product narrative.
-- Added accessible Framer Motion reveals, GSAP ScrollTrigger storytelling and Lenis smooth scrolling.
-- Added capability grid, product preview, use-case carousel, FAQ and conversion sections.
-- Added technology route, sitemap, robots and richer metadata.
-- Added marketing and SEO documentation.
+- Added the premium product marketing experience, motion system and SEO foundation.
 
 ## 0.2.0 — Phase 02
 
-- Added GridMind design system foundations and reusable interface primitives.
+- Added GridMind design system primitives and interface states.
 
 ## 0.1.0 — Phase 01
 
-- Established production-grade Next.js foundation.
+- Established the production foundation.
