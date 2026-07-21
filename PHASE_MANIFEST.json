@@ -1,11 +1,12 @@
 {
   "project": "GridMind",
-  "phase": "02 \u2014 Design System",
-  "version": "0.2.0",
+  "phase": "03 \u2014 Marketing Experience",
+  "version": "0.3.0",
+  "generated_at": "2026-07-21",
   "data_mode": "local",
   "external_api_keys_required": false,
-  "file_count": 72,
-  "source_bytes": 58749,
+  "file_count": 87,
+  "source_bytes": 67511,
   "files": [
     {
       "path": ".env.example",
@@ -34,8 +35,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 649,
-      "sha256": "c6757c7062420f17e61df0e85f4678fb6f39099c268ea070723cd961394dff21"
+      "bytes": 586,
+      "sha256": "22df8500de9db42c52a5b150b4a838163b1f8fe73d394eec44aaa97e0f6bd186"
     },
     {
       "path": "CONTRIBUTING.md",
@@ -49,8 +50,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 1087,
-      "sha256": "db092ef282dd02f172bb48d2207053352d8d0b84b1dbae240d97007b5216a352"
+      "bytes": 505,
+      "sha256": "5cda487d498e19bd18b1bdf38b3f7d007dc2ae50088062237e961106a4b6f94d"
     },
     {
       "path": "SECURITY.md",
@@ -93,6 +94,16 @@
       "sha256": "d201c8f86ce90dc8f363289ad65824cdc4b515799556d45d6c4ecf9dff874c69"
     },
     {
+      "path": "docs/marketing-experience.md",
+      "bytes": 507,
+      "sha256": "df442381d0d06a7e3742718719392578e81a0a6774e200314d1d8ee8219db2cb"
+    },
+    {
+      "path": "docs/seo.md",
+      "bytes": 191,
+      "sha256": "beabc07519fba3b2089d76a445ea63108cb406d7d7982f5f22ceddd9d3d167cd"
+    },
+    {
       "path": "docs/setup.md",
       "bytes": 185,
       "sha256": "0efe4eb357166978737f4d3bfa481c8930772c1495e8407398ab62fbd0679ef8"
@@ -115,7 +126,7 @@
     {
       "path": "package.json",
       "bytes": 1631,
-      "sha256": "01a66ac28551af87aae6ca309bf9d1445173a8e3565fc9029654a3644269cad8"
+      "sha256": "1299fb04c40d328afa75ed11d5a7840fd97edcfe9449d5be8f9dc9f2575fbbea"
     },
     {
       "path": "postcss.config.mjs",
@@ -144,8 +155,8 @@
     },
     {
       "path": "src/app/globals.css",
-      "bytes": 2843,
-      "sha256": "f6db878fe54fa9bbd0fb83d203a2198969cd1b868cf39cfaa9164b84ffc8b9f9"
+      "bytes": 3207,
+      "sha256": "544bdea08329b1e7103e798042a94da46189bbf6e98d2f3ff2f8a7851d008813"
     },
     {
       "path": "src/app/layout.tsx",
@@ -164,8 +175,23 @@
     },
     {
       "path": "src/app/page.tsx",
-      "bytes": 1115,
-      "sha256": "d3d84d409e6042f8465dfec437824dbecd75b875003dfecf440e6d9cf17b1cb1"
+      "bytes": 1037,
+      "sha256": "88888a91b12197a2d9d35e6cf9b911334554820fc951421804ea739b99158815"
+    },
+    {
+      "path": "src/app/robots.ts",
+      "bytes": 202,
+      "sha256": "26e51d3336c91698907981d410ed18883bfed14eb6908889c1bb2f325c57a95a"
+    },
+    {
+      "path": "src/app/sitemap.ts",
+      "bytes": 346,
+      "sha256": "96b69d6b7398612f940a5f16ba0cd9d1375cd7d9eca2ea50a9abd486ec67fdf4"
+    },
+    {
+      "path": "src/app/technology/page.tsx",
+      "bytes": 1777,
+      "sha256": "cf0d765d9bbedcc159c9ac8960da5dae466c8c6c3046c11b957625939bb6540d"
     },
     {
       "path": "src/components/dashboard/sidebar.tsx",
@@ -183,9 +209,24 @@
       "sha256": "b6d784c0c0a2e011f8b37b138b430757d1d542aa124fd31451f747b8eaf55b79"
     },
     {
+      "path": "src/components/marketing/capabilities-grid.tsx",
+      "bytes": 2614,
+      "sha256": "ab7036da8e28ea005578e5f9edc87c9199f3fd3d6c60dcf5c18e153cb2467f30"
+    },
+    {
       "path": "src/components/marketing/energy-orb.tsx",
       "bytes": 2142,
       "sha256": "beb50bf764d3704278581a95e467c5f685736f46db7807175cad4cb32244451b"
+    },
+    {
+      "path": "src/components/marketing/faq.tsx",
+      "bytes": 1278,
+      "sha256": "fd8ce1b0c1a1aec423e970c899fc7873ee07a00ff9a627cebdc59510c13ea468"
+    },
+    {
+      "path": "src/components/marketing/final-cta.tsx",
+      "bytes": 876,
+      "sha256": "3dd3ea6b88a739e46824adae97efc2f0772e03130b403c12dd7cf6eccf631390"
     },
     {
       "path": "src/components/marketing/hero.tsx",
@@ -193,14 +234,49 @@
       "sha256": "a4eb3bbf7e4d561a6e7d3f4a0cb69df436be0de1e3cd9c117223037edd8422fc"
     },
     {
+      "path": "src/components/marketing/impact-strip.tsx",
+      "bytes": 1076,
+      "sha256": "7013e5181481fbd8a51ad5f2df061a837ed2ed79804d677c5dc0edba7e5e1315"
+    },
+    {
       "path": "src/components/marketing/platform-section.tsx",
       "bytes": 1533,
       "sha256": "d0cca1aa3fc0b4ca428467bd9795bf93ab8f5d092e38749d9bc00ac6a923e9f7"
     },
     {
+      "path": "src/components/marketing/product-preview.tsx",
+      "bytes": 2488,
+      "sha256": "321e48c0eb6c233343ff96948950253f33dba1e23b2836e028875678f2f61beb"
+    },
+    {
+      "path": "src/components/marketing/scroll-story.tsx",
+      "bytes": 1371,
+      "sha256": "e6db3326b47553f8fcc91f33915002574586ad4271df1b8f1bfd5e7055b5fef4"
+    },
+    {
+      "path": "src/components/marketing/site-footer.tsx",
+      "bytes": 770,
+      "sha256": "00b61f2421234261e7e15fae3b4ebbf29ccee74a02acd56d39a354ee878381ad"
+    },
+    {
       "path": "src/components/marketing/site-header.tsx",
       "bytes": 1194,
       "sha256": "b47f6c72d5c53d731048962a19d4cbaad026214555ddb69c4035a5d009a941d7"
+    },
+    {
+      "path": "src/components/marketing/use-cases.tsx",
+      "bytes": 2674,
+      "sha256": "b4e93ee12d1d6b51b0f0ce1f379712c2b9d9ad424bde4c7ace0fb77145910c85"
+    },
+    {
+      "path": "src/components/motion/reveal.tsx",
+      "bytes": 618,
+      "sha256": "8677948c95bd2555a86e235eacdeb255668b32b9eb96f26fc74d8df2c44ef8b0"
+    },
+    {
+      "path": "src/components/motion/smooth-scroll.tsx",
+      "bytes": 620,
+      "sha256": "de5b3cedca657d4eb4d06823baa6634fabc72993feaa79753c7cf843a178dc08"
     },
     {
       "path": "src/components/providers/app-providers.tsx",

@@ -80,3 +80,14 @@ body { background: var(--background); color: var(--foreground); text-rendering: 
     transition-duration: 0.01ms !important;
   }
 }
+
+.eyebrow {
+  font-size: 0.75rem;
+  font-weight: 650;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--primary);
+}
+.text-balance { text-wrap: balance; }
+@keyframes energy-pulse { 0%, 100% { opacity: .35; transform: scale(.98); } 50% { opacity: .8; transform: scale(1.02); } }
+.energy-pulse { animation: energy-pulse 4s ease-in-out infinite; }
