@@ -1,3 +1,25 @@
 import { NextResponse } from "next/server";
-import { inventoryItems, workOrdersV2 } from "@/features/operations/data";
-export async function GET(){return NextResponse.json({inventory:inventoryItems,workOrders:workOrdersV2,generatedAt:new Date().toISOString()})}
+import {
+  getDefaultDashboardLayout,
+  listInventoryItems,
+  listScheduledReports
+} from "@/features/operations/repository";
+import { listWorkOrders } from "@/features/maintenance/repository";
+
+export async function GET() {
+  const [inventory, workOrders, scheduledReports, dashboardLayout] =
+    await Promise.all([
+      listInventoryItems(),
+      listWorkOrders(),
+      listScheduledReports(),
+      getDefaultDashboardLayout()
+    ]);
+
+  return NextResponse.json({
+    inventory,
+    workOrders,
+    scheduledReports,
+    dashboardLayout,
+    generatedAt: new Date().toISOString()
+  });
+}

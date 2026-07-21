@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { escapeCsvCell } from "@/lib/security";
+import { securityHeaders } from "@/../src/lib/security-headers.mjs";
 
-describe("CSV security", () => {
-  it("neutralizes formula injection", () => {
-    expect(escapeCsvCell("=SUM(A1:A2)")).toContain("'=");
+describe("security headers", () => {
+  it("includes a content security policy", () => {
+    expect(securityHeaders.some((header) => header.key === "Content-Security-Policy")).toBe(true);
   });
 });

@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { createWorkOrder } from "./repository";
 import { workOrderSchema } from "./schemas";
+import { requirePermission } from "@/features/auth/session";
 
 export type WorkOrderActionState = {
   success: boolean;
@@ -14,6 +15,8 @@ export async function createWorkOrderAction(
   _previousState: WorkOrderActionState,
   formData: FormData
 ): Promise<WorkOrderActionState> {
+  await requirePermission("maintenance.write");
+
   const result = workOrderSchema.safeParse({
     title: formData.get("title"),
     deviceId: formData.get("deviceId"),
@@ -34,5 +37,9 @@ export async function createWorkOrderAction(
 
   await createWorkOrder(result.data);
   revalidatePath("/dashboard/maintenance");
-  return { success: true, message: "Work order created successfully." };
+
+  return {
+    success: true,
+    message: "Work order created successfully."
+  };
 }

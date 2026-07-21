@@ -53,6 +53,29 @@ enum RecommendationStatus {
   COMPLETED
 }
 
+enum WorkOrderStatus {
+  BACKLOG
+  SCHEDULED
+  IN_PROGRESS
+  BLOCKED
+  COMPLETED
+  OVERDUE
+}
+
+enum WorkOrderPriority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum GoalStatus {
+  ON_TRACK
+  AT_RISK
+  BEHIND
+  COMPLETED
+}
+
 model Workspace {
   id          String   @id @default(cuid())
   name        String
@@ -63,14 +86,18 @@ model Workspace {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  buildings      Building[]
-  tariffs        Tariff[]
-  goals          EnergyGoal[]
-  scenarios      Scenario[]
+  buildings       Building[]
+  tariffs         Tariff[]
+  goals           EnergyGoal[]
+  scenarios       Scenario[]
   recommendations Recommendation[]
-  reports        Report[]
-  activityLogs   ActivityLog[]
-  settings       WorkspaceSetting[]
+  reports         Report[]
+  activityLogs    ActivityLog[]
+  settings        WorkspaceSetting[]
+  dashboardLayouts DashboardLayout[]
+  scheduledReports ScheduledReport[]
+  inventoryItems  InventoryItem[]
+  users           LocalUser[]
 }
 
 model Building {
@@ -93,6 +120,7 @@ model Building {
   devices   Device[]
   alerts    Alert[]
   maintenanceRecords MaintenanceRecord[]
+  workOrders WorkOrder[]
 
   @@unique([workspaceId, code])
   @@index([workspaceId, isActive])
@@ -134,18 +162,18 @@ model Zone {
 }
 
 model Meter {
-  id          String       @id @default(cuid())
-  buildingId  String
-  zoneId      String?
-  name        String
-  serialNumber String      @unique
-  source      EnergySource @default(GRID)
-  unit        String       @default("kWh")
-  multiplier  Float        @default(1)
-  installedAt DateTime?
-  isActive    Boolean      @default(true)
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  id           String       @id @default(cuid())
+  buildingId   String
+  zoneId       String?
+  name         String
+  serialNumber String       @unique
+  source       EnergySource @default(GRID)
+  unit         String       @default("kWh")
+  multiplier   Float        @default(1)
+  installedAt  DateTime?
+  isActive     Boolean      @default(true)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
 
   building Building @relation(fields: [buildingId], references: [id], onDelete: Cascade)
   zone     Zone?    @relation(fields: [zoneId], references: [id], onDelete: SetNull)
@@ -157,24 +185,28 @@ model Meter {
 }
 
 model Device {
-  id              String       @id @default(cuid())
-  buildingId      String
-  zoneId          String?
-  name            String
-  assetTag        String       @unique
-  category        String
-  ratedPowerKw    Float
-  status          DeviceStatus @default(ACTIVE)
-  operatingHours  Float        @default(0)
-  installedAt     DateTime?
+  id                String       @id @default(cuid())
+  buildingId        String
+  zoneId            String?
+  name              String
+  assetTag          String       @unique
+  category          String
+  ratedPowerKw      Float
+  status            DeviceStatus @default(ACTIVE)
+  operatingHours    Float        @default(0)
+  installedAt       DateTime?
   expectedLifeYears Int?
-  createdAt       DateTime     @default(now())
-  updatedAt       DateTime     @updatedAt
+  healthScore       Int          @default(100)
+  anomalyCount30d   Int          @default(0)
+  efficiencyLossPercent Float     @default(0)
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
 
   building Building @relation(fields: [buildingId], references: [id], onDelete: Cascade)
   zone     Zone?    @relation(fields: [zoneId], references: [id], onDelete: SetNull)
   alerts   Alert[]
   maintenanceRecords MaintenanceRecord[]
+  workOrders WorkOrder[]
 
   @@index([buildingId, status])
   @@index([zoneId])
@@ -198,18 +230,18 @@ model Reading {
 }
 
 model Tariff {
-  id          String   @id @default(cuid())
-  workspaceId String
-  name        String
-  currency    String   @default("TRY")
-  pricePerKwh Float
-  peakPrice   Float?
+  id           String   @id @default(cuid())
+  workspaceId  String
+  name         String
+  currency     String   @default("TRY")
+  pricePerKwh  Float
+  peakPrice    Float?
   offPeakPrice Float?
-  validFrom   DateTime
-  validUntil  DateTime?
-  rules       Json?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  validFrom    DateTime
+  validUntil   DateTime?
+  rules        Json?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   @@index([workspaceId, validFrom])
@@ -257,23 +289,54 @@ model MaintenanceRecord {
 
   building Building @relation(fields: [buildingId], references: [id], onDelete: Cascade)
   device   Device?  @relation(fields: [deviceId], references: [id], onDelete: SetNull)
+
   @@index([buildingId, scheduledAt])
 }
 
+model WorkOrder {
+  id            String            @id @default(cuid())
+  buildingId    String
+  deviceId      String?
+  title         String
+  description   String?
+  owner         String
+  status        WorkOrderStatus   @default(BACKLOG)
+  priority      WorkOrderPriority @default(MEDIUM)
+  startsAt      DateTime
+  endsAt        DateTime
+  estimatedCost Float             @default(0)
+  actualCost    Float?
+  checklist     Json?
+  outcome       String?
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+
+  building Building @relation(fields: [buildingId], references: [id], onDelete: Cascade)
+  device   Device?  @relation(fields: [deviceId], references: [id], onDelete: SetNull)
+
+  @@index([buildingId, status, priority])
+  @@index([startsAt, endsAt])
+}
+
 model EnergyGoal {
-  id          String   @id @default(cuid())
+  id          String     @id @default(cuid())
   workspaceId String
   name        String
   metric      String
   baseline    Float
   target      Float
+  current     Float
+  unit        String
+  owner       String
+  status      GoalStatus @default(ON_TRACK)
   startsAt    DateTime
   endsAt      DateTime
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
 
   workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-  @@index([workspaceId, endsAt])
+
+  @@index([workspaceId, status, endsAt])
 }
 
 model Scenario {
@@ -288,6 +351,7 @@ model Scenario {
 
   workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   runs      SimulationRun[]
+
   @@index([workspaceId, status])
 }
 
@@ -306,27 +370,47 @@ model SimulationRun {
   errorMessage   String?
 
   scenario Scenario @relation(fields: [scenarioId], references: [id], onDelete: Cascade)
+
   @@index([scenarioId, startedAt])
 }
 
 model Recommendation {
-  id          String               @id @default(cuid())
-  workspaceId String
-  title       String
-  summary     String
-  category    String
-  impactScore Float
-  effortScore Float
-  confidence  Float
-  estimatedSavingsKwh Float?
+  id                   String               @id @default(cuid())
+  workspaceId          String
+  title                String
+  summary              String
+  category             String
+  impactScore          Float
+  effortScore          Float
+  confidence           Float
+  estimatedSavingsKwh  Float?
   estimatedSavingsCost Float?
-  status      RecommendationStatus @default(NEW)
-  evidence    Json?
-  createdAt   DateTime             @default(now())
-  updatedAt   DateTime             @updatedAt
+  status               RecommendationStatus @default(NEW)
+  evidence             Json?
+  createdAt            DateTime             @default(now())
+  updatedAt            DateTime             @updatedAt
 
   workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  actionItems ActionItem[]
+
   @@index([workspaceId, status, impactScore])
+}
+
+model ActionItem {
+  id                  String   @id @default(cuid())
+  recommendationId    String
+  title               String
+  owner               String
+  dueDate             DateTime
+  status              String   @default("backlog")
+  expectedSavingsKwh  Float    @default(0)
+  realizedSavingsKwh  Float    @default(0)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  recommendation Recommendation @relation(fields: [recommendationId], references: [id], onDelete: Cascade)
+
+  @@index([recommendationId, status])
 }
 
 model Report {
@@ -338,11 +422,95 @@ model Report {
   periodEnd   DateTime
   status      String   @default("draft")
   content     Json
+  version     Int      @default(1)
+  building    String   @default("All buildings")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
   workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
   @@index([workspaceId, createdAt])
+}
+
+model DashboardLayout {
+  id          String   @id @default(cuid())
+  workspaceId String
+  name        String
+  widgets     Json
+  isDefault   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId, isDefault])
+}
+
+model ScheduledReport {
+  id          String   @id @default(cuid())
+  workspaceId String
+  name        String
+  cadence     String
+  format      String
+  nextRunAt   DateTime
+  enabled     Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId, enabled, nextRunAt])
+}
+
+model InventoryItem {
+  id           String   @id @default(cuid())
+  workspaceId  String
+  sku          String
+  name         String
+  category     String
+  quantity     Int      @default(0)
+  reorderPoint Int      @default(0)
+  unitCost     Float    @default(0)
+  location     String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@unique([workspaceId, sku])
+  @@index([workspaceId, quantity, reorderPoint])
+}
+
+model LocalUser {
+  id           String   @id @default(cuid())
+  workspaceId  String
+  name         String
+  email        String
+  passwordHash String
+  role         String
+  active       Boolean  @default(true)
+  lastSeenAt   DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  sessions  LocalSession[]
+
+  @@unique([workspaceId, email])
+  @@index([workspaceId, active])
+}
+
+model LocalSession {
+  id        String   @id @default(cuid())
+  userId    String
+  tokenHash String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  revokedAt DateTime?
+
+  user LocalUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, expiresAt])
 }
 
 model ActivityLog {
@@ -356,6 +524,7 @@ model ActivityLog {
   createdAt   DateTime @default(now())
 
   workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
   @@index([workspaceId, createdAt])
 }
 
@@ -368,5 +537,6 @@ model WorkspaceSetting {
   updatedAt   DateTime @updatedAt
 
   workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
   @@unique([workspaceId, key])
 }

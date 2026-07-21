@@ -1,4 +1,15 @@
-import { inventoryItems } from "./data";
-export function getInventory(){return structuredClone(inventoryItems)}
-export function getLowStock(){return inventoryItems.filter(i=>i.quantity<=i.reorderPoint)}
-export function inventoryValue(){return inventoryItems.reduce((s,i)=>s+i.quantity*i.unitCost,0)}
+import { listInventoryItems } from "./repository";
+
+export async function getInventory() {
+  return listInventoryItems();
+}
+
+export async function getLowStock() {
+  const items = await listInventoryItems();
+  return items.filter((item) => item.quantity <= item.reorderPoint);
+}
+
+export async function inventoryValue() {
+  const items = await listInventoryItems();
+  return items.reduce((sum, item) => sum + item.quantity * item.unitCost, 0);
+}

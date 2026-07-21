@@ -1,6 +1,6 @@
-import { securityHeaders } from "./src/lib/security.ts";
+import { securityHeaders } from "./src/lib/security-headers.mjs";
 
-/** @type {import('next').NextConfig} */
+/** @type {import("next").NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
