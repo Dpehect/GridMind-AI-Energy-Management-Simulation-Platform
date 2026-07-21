@@ -1,0 +1,5 @@
+{
+  "scripts": {
+    "db:seed:workflows": "tsx prisma/seed-workflows.ts"
+  }
+}

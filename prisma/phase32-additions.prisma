@@ -1,0 +1,148 @@
+// Merge these additions into prisma/schema.prisma.
+
+model WorkOrderComment {
+  id          String   @id @default(cuid())
+  workOrderId String
+  authorId    String?
+  authorName  String
+  body        String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  workOrder WorkOrder @relation(fields: [workOrderId], references: [id], onDelete: Cascade)
+
+  @@index([workOrderId, createdAt])
+}
+
+model WorkOrderAttachment {
+  id          String   @id @default(cuid())
+  workOrderId String
+  fileName    String
+  mimeType    String
+  sizeBytes   Int
+  storagePath String
+  checksum    String
+  uploadedBy  String
+  createdAt   DateTime @default(now())
+
+  workOrder WorkOrder @relation(fields: [workOrderId], references: [id], onDelete: Cascade)
+
+  @@index([workOrderId, createdAt])
+}
+
+model InventoryMovement {
+  id              String   @id @default(cuid())
+  workspaceId     String
+  inventoryItemId String
+  workOrderId     String?
+  type            String
+  quantity        Int
+  unitCost        Float
+  reference       String?
+  actor           String
+  createdAt       DateTime @default(now())
+
+  workspace     Workspace     @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  inventoryItem InventoryItem @relation(fields: [inventoryItemId], references: [id], onDelete: Restrict)
+  workOrder     WorkOrder?    @relation(fields: [workOrderId], references: [id], onDelete: SetNull)
+
+  @@index([workspaceId, inventoryItemId, createdAt])
+  @@index([workOrderId])
+}
+
+model PurchaseRequest {
+  id          String   @id @default(cuid())
+  workspaceId String
+  requestedBy String
+  status      String   @default("draft")
+  justification String
+  totalCost   Float    @default(0)
+  approvedBy  String?
+  approvedAt  DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  items     PurchaseRequestItem[]
+
+  @@index([workspaceId, status, createdAt])
+}
+
+model PurchaseRequestItem {
+  id                String   @id @default(cuid())
+  purchaseRequestId String
+  inventoryItemId   String?
+  description       String
+  quantity          Int
+  estimatedUnitCost Float
+  createdAt         DateTime @default(now())
+
+  purchaseRequest PurchaseRequest @relation(fields: [purchaseRequestId], references: [id], onDelete: Cascade)
+
+  @@index([purchaseRequestId])
+}
+
+model GoalMilestone {
+  id          String   @id @default(cuid())
+  goalId      String
+  title       String
+  targetValue Float
+  dueDate     DateTime
+  status      String   @default("planned")
+  completedAt DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  goal EnergyGoal @relation(fields: [goalId], references: [id], onDelete: Cascade)
+
+  @@index([goalId, dueDate])
+}
+
+model GoalProgressEntry {
+  id        String   @id @default(cuid())
+  goalId    String
+  value     Float
+  note      String?
+  recordedBy String
+  recordedAt DateTime @default(now())
+
+  goal EnergyGoal @relation(fields: [goalId], references: [id], onDelete: Cascade)
+
+  @@index([goalId, recordedAt])
+}
+
+model ReportApproval {
+  id         String   @id @default(cuid())
+  reportId   String
+  reviewerId String?
+  reviewer   String
+  decision   String
+  comment    String?
+  createdAt  DateTime @default(now())
+
+  report Report @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  @@index([reportId, createdAt])
+}
+
+model RecurringMaintenancePlan {
+  id          String   @id @default(cuid())
+  workspaceId String
+  buildingId  String
+  deviceId    String?
+  title       String
+  cadence     String
+  interval    Int      @default(1)
+  nextRunAt   DateTime
+  enabled     Boolean  @default(true)
+  owner       String
+  checklist   Json?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  building  Building  @relation(fields: [buildingId], references: [id], onDelete: Cascade)
+  device    Device?   @relation(fields: [deviceId], references: [id], onDelete: SetNull)
+
+  @@index([workspaceId, enabled, nextRunAt])
+}
