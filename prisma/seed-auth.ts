@@ -4,6 +4,11 @@ import { hashPassword } from "../src/features/auth/password";
 const prisma = new PrismaClient();
 
 async function main() {
+  if (process.env.GRIDMIND_ENABLE_DEMO_USERS !== "true") {
+    console.log("Demo user seed skipped. Set GRIDMIND_ENABLE_DEMO_USERS=true to enable it.");
+    return;
+  }
+
   const workspace = await prisma.workspace.upsert({
     where: { slug: "gridmind-hq" },
     update: {},
@@ -14,60 +19,42 @@ async function main() {
   });
 
   const users = [
-    {
-      name: "GridMind Administrator",
-      email: "admin@gridmind.local",
-      password: "GridMindAdmin2026!",
-      role: "admin"
-    },
-    {
-      name: "Energy Manager",
-      email: "energy@gridmind.local",
-      password: "GridMindEnergy2026!",
-      role: "energy_manager"
-    },
-    {
-      name: "Facility Manager",
-      email: "facility@gridmind.local",
-      password: "GridMindFacility2026!",
-      role: "facility_manager"
-    },
-    {
-      name: "Read Only Viewer",
-      email: "viewer@gridmind.local",
-      password: "GridMindViewer2026!",
-      role: "viewer"
-    }
-  ];
+    ["GridMind Administrator", "admin@gridmind.local", "GridMindAdmin2026!", "admin"],
+    ["Energy Manager", "energy@gridmind.local", "GridMindEnergy2026!", "energy_manager"],
+    ["Facility Manager", "facility@gridmind.local", "GridMindFacility2026!", "facility_manager"],
+    ["Read Only Viewer", "viewer@gridmind.local", "GridMindViewer2026!", "viewer"]
+  ] as const;
 
-  for (const user of users) {
+  for (const [name, email, password, role] of users) {
     await prisma.localUser.upsert({
       where: {
         workspaceId_email: {
           workspaceId: workspace.id,
-          email: user.email
+          email
         }
       },
       update: {
-        name: user.name,
-        role: user.role,
+        name,
+        role,
         active: true,
-        passwordHash: hashPassword(user.password)
+        passwordHash: hashPassword(password)
       },
       create: {
         workspaceId: workspace.id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
+        name,
+        email,
+        role,
         active: true,
-        passwordHash: hashPassword(user.password)
+        passwordHash: hashPassword(password)
       }
     });
   }
 }
 
 main()
-  .then(() => prisma.$disconnect())
+  .then(async () => {
+    await prisma.$disconnect();
+  })
   .catch(async (error) => {
     console.error(error);
     await prisma.$disconnect();

@@ -1,6 +1,6 @@
 {
   "name": "gridmind",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "description": "Local-first energy management, simulation and operations platform.",
   "scripts": {
@@ -18,8 +18,9 @@
     "test:e2e:ui": "playwright test --ui",
     "audit:a11y": "playwright test tests/e2e/accessibility.spec.ts",
     "audit:release": "tsx scripts/release-health.ts",
+    "prepare:e2e": "npm run db:generate && npm run db:push && npm run db:seed && npm run db:seed:auth",
     "check": "npm run typecheck && npm run lint && npm run test && npm run format:check",
-    "verify": "npm run check && npm run build && npm run test:e2e && npm run audit:release",
+    "verify": "npm run check && npm run build && npm run prepare:e2e && npm run test:e2e && npm run audit:release",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:push": "prisma db push",
