@@ -1,11 +1,13 @@
 import Link from "next/link";
-import { BarChart3, BrainCircuit, Building2, FileText, Gauge, Settings2, SlidersHorizontal } from "lucide-react";
+import { BarChart3, BrainCircuit, Building2, Cpu, FileSpreadsheet, FileText, Gauge, Settings2, SlidersHorizontal } from "lucide-react";
 import { Logo } from "@/components/logo";
 import { cn } from "@/lib/utils";
 
 const items = [
   ["Overview", "/dashboard", Gauge],
   ["Buildings", "/dashboard/buildings", Building2],
+  ["Assets", "/dashboard/assets", Cpu],
+  ["Data ingestion", "/dashboard/data-ingestion", FileSpreadsheet],
   ["Intelligence", "/dashboard/intelligence", BrainCircuit],
   ["Scenarios", "/dashboard/scenarios", SlidersHorizontal],
   ["Reports", "/dashboard/reports", FileText]

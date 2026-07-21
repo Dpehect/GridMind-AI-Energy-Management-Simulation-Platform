@@ -6,6 +6,14 @@ const tones = {
   critical: "bg-rose-500/12 text-rose-700 dark:text-rose-300",
   neutral: "bg-muted text-muted-foreground",
 };
-export function StatusBadge({ tone = "neutral", children }: { tone?: keyof typeof tones; children: ReactNode }) {
-  return <span className={cn("inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium", tones[tone])}>{children}</span>;
+function toneForStatus(status?: string): keyof typeof tones {
+  const value = status?.toLowerCase();
+  if (["operational", "active", "healthy"].includes(value ?? "")) return "healthy";
+  if (["optimization", "maintenance", "attention"].includes(value ?? "")) return "attention";
+  if (["inactive", "critical", "failed"].includes(value ?? "")) return "critical";
+  return "neutral";
+}
+export function StatusBadge({ tone, status, children }: { tone?: keyof typeof tones; status?: string; children?: ReactNode }) {
+  const resolvedTone = tone ?? toneForStatus(status);
+  return <span className={cn("inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium", tones[resolvedTone])}>{children ?? status}</span>;
 }

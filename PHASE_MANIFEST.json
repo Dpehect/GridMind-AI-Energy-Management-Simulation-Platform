@@ -1,12 +1,12 @@
 {
   "project": "GridMind",
-  "phase": "04 \u2014 Local Database & Domain Model",
-  "version": "0.4.0",
+  "phase": "08 \u2014 Local Intelligence Engine",
+  "version": "0.8.0",
   "generated_at": "2026-07-21",
-  "data_mode": "local-sqlite",
+  "data_mode": "local",
   "external_api_keys_required": false,
-  "file_count": 103,
-  "source_bytes": 88986,
+  "file_count": 142,
+  "source_bytes": 176631,
   "files": [
     {
       "path": ".env.example",
@@ -35,8 +35,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 682,
-      "sha256": "0e3dff161e9979b9d4a73d5c6a4f1ee39e8d1e56faf0a14a703fb6b0898a23ca"
+      "bytes": 1814,
+      "sha256": "e2fcb37180eb1150a7fd8483a0b988e2cd015f55cb8f56a7579dad40fb32f632"
     },
     {
       "path": "CONTRIBUTING.md",
@@ -49,9 +49,14 @@
       "sha256": "10566b4edd05f4e2b0639266a9ba8def97811b4f83fa8f348bb15d31fab531f1"
     },
     {
+      "path": "PHASE_MANIFEST.json",
+      "bytes": 21556,
+      "sha256": "9602613359db69e9f895d46a6948fcd43160a7592629a6a7de2ae4d6bcaa4442"
+    },
+    {
       "path": "README.md",
-      "bytes": 851,
-      "sha256": "bea872f01d1b0d3704aa6c9a5b358c0c44b73d8accbd4cefd46b426fbce868ea"
+      "bytes": 1207,
+      "sha256": "708f800f80337db8a53e6b007d6a1a62783efb2d33624dcd3943dbade807d4fa"
     },
     {
       "path": "SECURITY.md",
@@ -84,6 +89,11 @@
       "sha256": "8e9480758858ec67a15e8e0ba3ed8afa697b344149dbb7c2571a6e4dd679fad9"
     },
     {
+      "path": "docs/asset-management.md",
+      "bytes": 544,
+      "sha256": "5a01a5cf65018c0cf421c6793e3caa4be269bac8a86824331eab3ba218787481"
+    },
+    {
       "path": "docs/coding-standards.md",
       "bytes": 312,
       "sha256": "96e7157ebb8818177f2fb782e650c24f09b0d1108740cc8b0b5905a1a4fffcdc"
@@ -99,6 +109,11 @@
       "sha256": "fb579ba04c875e3675b2a1605abe7b33b5b2f761e63fdd3faf6488fbc1173e5c"
     },
     {
+      "path": "docs/data/ingestion.md",
+      "bytes": 595,
+      "sha256": "9cf9920b571cf4e0fd7dd27cdc30bf0b0c91d97457de7d594d8c33039f4693f3"
+    },
+    {
       "path": "docs/design-principles.md",
       "bytes": 245,
       "sha256": "03e7f3de18acc082a2d466db3d2f4cba232fb89b572c3b15cafa3306267ee2dd"
@@ -109,9 +124,19 @@
       "sha256": "6792c631d6bcbc162a84b7cf4bde45973c173deaca49918c15cc9bed6dae8857"
     },
     {
+      "path": "docs/energy-command-center.md",
+      "bytes": 410,
+      "sha256": "a6ca45dbb5fab00f66465aade628cc149ef8b1605fbdf0c87cb870ddde9d9687"
+    },
+    {
       "path": "docs/folder-structure.md",
       "bytes": 210,
       "sha256": "d201c8f86ce90dc8f363289ad65824cdc4b515799556d45d6c4ecf9dff874c69"
+    },
+    {
+      "path": "docs/local-intelligence-engine.md",
+      "bytes": 395,
+      "sha256": "3389598fa0b2b5b752b5d57bd67643db1955a30e7f1ba9f530a3d46ed8bdd2ab"
     },
     {
       "path": "docs/marketing-experience.md",
@@ -146,7 +171,7 @@
     {
       "path": "package.json",
       "bytes": 2084,
-      "sha256": "59f63c06a1a112ead0b35bd4df1600d0768fdc9cf2d1f7983579b6ed2cbef3ed"
+      "sha256": "6fd5a0d7fd07cf02b4e683654f6f8010997fd24f9d87a7f77e635b42e4fdcde8"
     },
     {
       "path": "postcss.config.mjs",
@@ -179,19 +204,49 @@
       "sha256": "6444a84569b6545b8f150fb7197a26593e278a06577990c2ef02653bff5cfd7d"
     },
     {
+      "path": "src/app/(app)/dashboard/assets/page.tsx",
+      "bytes": 1206,
+      "sha256": "3e6ff826d1a00003110dba3bf1fc05dc8dc25ef56af2ae57e1756d8e926d2a93"
+    },
+    {
+      "path": "src/app/(app)/dashboard/buildings/[id]/page.tsx",
+      "bytes": 3713,
+      "sha256": "53ac853b582f8cad4f8ad61468c2d800338bca203f440b94bd564f5e20775741"
+    },
+    {
+      "path": "src/app/(app)/dashboard/buildings/page.tsx",
+      "bytes": 1307,
+      "sha256": "8276642f41b37a5752a9ebfe2cf8e01027ef4f10ba8a09174ff242200506c61d"
+    },
+    {
+      "path": "src/app/(app)/dashboard/data-ingestion/page.tsx",
+      "bytes": 2279,
+      "sha256": "6055039996e3aec0f3f1360c55cf6b53283a1572bc9aa585d331bb67e07983d9"
+    },
+    {
+      "path": "src/app/(app)/dashboard/intelligence/page.tsx",
+      "bytes": 1045,
+      "sha256": "e4c125b3543b1d2098ea8c224df6888d898edd6b5b63309c2596db2d5e82c6f6"
+    },
+    {
       "path": "src/app/(app)/dashboard/layout.tsx",
       "bytes": 339,
       "sha256": "58b31b3569fe46cc18983d689445c0dcccd1c176d742a05753e2387e21264f27"
     },
     {
       "path": "src/app/(app)/dashboard/page.tsx",
-      "bytes": 1196,
-      "sha256": "e1c6b9bfb1720cd3545cb3f400e0638dfddd09f67b7e8fcf1da5785eb71a6b65"
+      "bytes": 2061,
+      "sha256": "369b182f4a82153538070d80350606b629a98458a707d9c7839090c60067cb28"
     },
     {
       "path": "src/app/(app)/design-system/page.tsx",
       "bytes": 4307,
       "sha256": "eb77a70a3cc67dbc62c3b58dafb25d6617aad02c0c2f366cf54f40aaace7645e"
+    },
+    {
+      "path": "src/app/api/readings/import/route.ts",
+      "bytes": 945,
+      "sha256": "40258627f6cd43939b1209cf2d690adb6d3806ecd4b4b09117cad9ee8b576fde"
     },
     {
       "path": "src/app/api/system/database-health/route.ts",
@@ -245,8 +300,8 @@
     },
     {
       "path": "src/components/dashboard/sidebar.tsx",
-      "bytes": 1756,
-      "sha256": "444108bc70122cda015cd6111b73c45e464eb5240385d5265e100e4df6571e78"
+      "bytes": 1886,
+      "sha256": "486bc6fdd8e480e33c3b9c650ca302e70a4c1d23dfedb535b236d35e28f0fd65"
     },
     {
       "path": "src/components/dashboard/topbar.tsx",
@@ -395,8 +450,8 @@
     },
     {
       "path": "src/components/ui/metric-card.tsx",
-      "bytes": 1146,
-      "sha256": "b688bddc641e5119c73dce512b727f0f0db599b101898148d9b370647314e4c8"
+      "bytes": 1218,
+      "sha256": "66a77efcf9a0aa908ac288a8a769913eb4dfa9ba98077f518158ab1995b312d9"
     },
     {
       "path": "src/components/ui/page-header.tsx",
@@ -430,8 +485,8 @@
     },
     {
       "path": "src/components/ui/status-badge.tsx",
-      "bytes": 590,
-      "sha256": "e39d8813fe8034d817f4e0264d37a6d1eea6b5017d1e193e318234c6ffad8870"
+      "bytes": 1060,
+      "sha256": "17c4b0c99a598db91d9633338c201d2a0ad822073b0b86c939758c91aa337b9f"
     },
     {
       "path": "src/components/ui/textarea.tsx",
@@ -439,9 +494,74 @@
       "sha256": "69354e79d565ea2b8745510538d74dbf341ce738082ed1eeb84bd6c300582ba9"
     },
     {
+      "path": "src/data/assets.ts",
+      "bytes": 3382,
+      "sha256": "29f35a2eb9df2d0f43ccc33439ddf0cc79e1ad156ad2ca22d6c2676a83bb81aa"
+    },
+    {
+      "path": "src/data/command-center.ts",
+      "bytes": 2667,
+      "sha256": "e627b4dbe9a52ddbf0629448168029809c3a026e441bf422fe5a0b92d0b1f7b9"
+    },
+    {
       "path": "src/data/demo-metrics.ts",
       "bytes": 884,
       "sha256": "b5372d8d8ef4a1ec54f8fd09e174b0e24d0ebc45c3b2330c64a2815092387a0d"
+    },
+    {
+      "path": "src/data/intelligence.ts",
+      "bytes": 765,
+      "sha256": "e6afb5cf114fdedb9ef3a6af6f0ee2e8f4414ffb89de1c80e43db224e375bf48"
+    },
+    {
+      "path": "src/data/sample-readings.csv",
+      "bytes": 225,
+      "sha256": "19b13cdbc5f7ccd6537b7b41ccc5f3062fa2b2d907d8d5564ca8e46f48853345"
+    },
+    {
+      "path": "src/features/assets/asset-table.tsx",
+      "bytes": 2147,
+      "sha256": "ae13be34a37d4916f081ec5ee343586e48f6208cc7c8832126a668ed2b90cd48"
+    },
+    {
+      "path": "src/features/assets/building-cards.tsx",
+      "bytes": 2657,
+      "sha256": "7e72992c1e0de6d2d1fe9dfcb29c0c856fa3d9883e55cc323f896f9873359664"
+    },
+    {
+      "path": "src/features/assets/building-form.tsx",
+      "bytes": 2508,
+      "sha256": "8712c1cb06c5df53829227f188bb868e7acdb4e5fc0d85400204044c02e0ae5b"
+    },
+    {
+      "path": "src/features/assets/create-building-dialog.tsx",
+      "bytes": 1255,
+      "sha256": "8b22f39854877c17089e354d7d230d2c03553353c0291fbd4c927ed28bbe2985"
+    },
+    {
+      "path": "src/features/dashboard/alert-feed.tsx",
+      "bytes": 1416,
+      "sha256": "8c8f8aab8c6b32fd48459bdc78e1b3fd56905c23a61a7afb8db5d352bc93b9b8"
+    },
+    {
+      "path": "src/features/dashboard/command-center-toolbar.tsx",
+      "bytes": 831,
+      "sha256": "afe68d90d6cabf6b76638e8f020ea9d44104b426ec12f058b6ce627b1be763ca"
+    },
+    {
+      "path": "src/features/dashboard/command-metrics.tsx",
+      "bytes": 1891,
+      "sha256": "7d15e08c80c0c5ff1498fffd90b868f88f380d0a86074fedf94ca81aaf720aed"
+    },
+    {
+      "path": "src/features/dashboard/demand-profile.tsx",
+      "bytes": 3028,
+      "sha256": "7d78d48befffd69ef8df4076ef29090f67dbb7805bff8b9cdfdb50066610498c"
+    },
+    {
+      "path": "src/features/dashboard/energy-heatmap.tsx",
+      "bytes": 1587,
+      "sha256": "bd9a869fbefc3f29e41124ab9b4413d3c831c6790b4b359e86edac40deeb0ca0"
     },
     {
       "path": "src/features/dashboard/metric-grid.tsx",
@@ -454,9 +574,29 @@
       "sha256": "78f1e0583d9ae7a626ab98ae4f8c798d1f46e22e5ca1c3121eb036e86cae9521"
     },
     {
+      "path": "src/features/dashboard/zone-breakdown.tsx",
+      "bytes": 1146,
+      "sha256": "d62aac07e10be14d36590292911d3eafa249ca9d3d04f493deb879dbe1721fdb"
+    },
+    {
       "path": "src/features/dashboard/zone-table.tsx",
       "bytes": 922,
       "sha256": "9447ed0c7b19420baaa632d338516a70c29c644ec9422aad9e038ca2d8ab311c"
+    },
+    {
+      "path": "src/features/data-ingestion/csv-importer.tsx",
+      "bytes": 3392,
+      "sha256": "9309042b78b1f579d807bee88589314601c62ac409ef1a8794741aa427ccad18"
+    },
+    {
+      "path": "src/features/data-ingestion/manual-reading-form.tsx",
+      "bytes": 1807,
+      "sha256": "8d1b845940144542428dc2bd17dcaac923fc302c67e9c8c0a5391676ba8ffcc4"
+    },
+    {
+      "path": "src/features/intelligence/intelligence-overview.tsx",
+      "bytes": 4681,
+      "sha256": "f18595a770cebc9bc216ba5047aae9d23423a8f0079a28765a930744eedc670b"
     },
     {
       "path": "src/hooks/use-dashboard-store.ts",
@@ -514,9 +654,64 @@
       "sha256": "4d819c34308f3fef033c0874010c6ba7df286994f7f725e7c2023d4d8a76d123"
     },
     {
+      "path": "src/lib/ingestion/csv.ts",
+      "bytes": 3666,
+      "sha256": "8e27bc376f82f812830473e4007f066f9d3c06882f8ca3042370126b0a43bb37"
+    },
+    {
+      "path": "src/lib/ingestion/import-service.ts",
+      "bytes": 1307,
+      "sha256": "53f47f3fe8fe0454e806dedff0ade78829fef7b1c42740418a824a58423abf21"
+    },
+    {
+      "path": "src/lib/ingestion/types.ts",
+      "bytes": 447,
+      "sha256": "3234000ff56c07889d68d3ca5fa36eae146db2630e8e4e98356164cdb23edaee"
+    },
+    {
+      "path": "src/lib/intelligence/anomaly.ts",
+      "bytes": 1461,
+      "sha256": "f6b7e5c4620d0c595365d2657e10175a3507b40cfc5be7f92a80ff398215643e"
+    },
+    {
+      "path": "src/lib/intelligence/forecast.ts",
+      "bytes": 1237,
+      "sha256": "06d5cbaba903048820cf3e3886d57316b9a3a82b03eef3c31643a0a980dd3e60"
+    },
+    {
+      "path": "src/lib/intelligence/index.ts",
+      "bytes": 172,
+      "sha256": "a98d9d96062731e28cb3907f8100a53a464d46f7a809c607c8ddbf5f9266f5d9"
+    },
+    {
+      "path": "src/lib/intelligence/profile.ts",
+      "bytes": 1960,
+      "sha256": "f6c2036aab9a7d63da7e789a88f4bd0bdc51cc7f179d757962d95df495065adf"
+    },
+    {
+      "path": "src/lib/intelligence/recommendations.ts",
+      "bytes": 2580,
+      "sha256": "8eeb81481d7940dbddad43e82101d090e265e82c5e2d45fdc8894bbe5c403146"
+    },
+    {
+      "path": "src/lib/intelligence/statistics.ts",
+      "bytes": 662,
+      "sha256": "ba6c5914d8033ed7617a791e672263fd18e28c7b394d17f0c74a157f732e777d"
+    },
+    {
+      "path": "src/lib/intelligence/types.ts",
+      "bytes": 923,
+      "sha256": "40f132525184fc7672d81df751c0b1157f064b7396b8287ae2242c94569735ea"
+    },
+    {
       "path": "src/lib/utils.ts",
       "bytes": 311,
       "sha256": "1a3f1cb37b5e8007fbb19ef9f76b0a12e17f1bd58bffa029dac6f82e0a0e4a8b"
+    },
+    {
+      "path": "src/lib/validation/assets.ts",
+      "bytes": 825,
+      "sha256": "2187463de231805f56f30d35a1f85b0c303afe073f780c73e6168c2952c5b8b5"
     },
     {
       "path": "tsconfig.json",

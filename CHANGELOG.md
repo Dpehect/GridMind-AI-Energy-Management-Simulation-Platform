@@ -1,5 +1,27 @@
 # Changelog
 
+## 0.8.0 — Phase 08
+
+- Added local anomaly detection and forecasting engine.
+- Added explainable consumption profile classification.
+- Added ranked energy recommendations with confidence and savings estimates.
+- Added Energy Intelligence dashboard and technical documentation.
+
+## 0.6.0 — Phase 06
+
+- Added secure CSV and manual meter-reading ingestion.
+- Added schema validation, duplicate detection and quality scoring.
+- Added atomic local import service and activity logging.
+- Added data-ingestion dashboard and operational documentation.
+
+## 0.5.0 — Phase 05
+
+- Added building portfolio and facility detail workflows.
+- Added meter and device inventory with health indicators.
+- Added validated local building creation experience.
+- Added search, filters, hierarchy views and responsive asset tables.
+
+
 ## 0.4.0 — Phase 04
 
 - Added Prisma and zero-account SQLite persistence.
@@ -20,3 +42,10 @@
 ## 0.1.0 — Phase 01
 
 - Established the production foundation.
+## 0.7.0 — Phase 07
+
+- Rebuilt the dashboard as a professional Energy Command Center.
+- Added demand baseline comparison, energy heatmap and system contribution analysis.
+- Added operational alert feed, local export feedback and live demo controls.
+- Added command-center demo datasets with deterministic metrics.
+
