@@ -8,6 +8,7 @@ import {
   FileSpreadsheet,
   FileText,
   Gauge,
+  Leaf,
   Map,
   Settings2,
   SlidersHorizontal
@@ -24,6 +25,7 @@ const items = [
   ["Scenarios", "/dashboard/scenarios", SlidersHorizontal],
   ["2D energy map", "/dashboard/energy-map", Map],
   ["3D digital twin", "/dashboard/digital-twin", Boxes],
+  ["Cost & carbon", "/dashboard/cost-carbon", Leaf],
   ["Reports", "/dashboard/reports", FileText]
 ] as const;
 
