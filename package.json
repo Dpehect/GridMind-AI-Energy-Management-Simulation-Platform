@@ -1,6 +1,6 @@
 {
   "name": "gridmind",
-  "version": "0.8.0",
+  "version": "0.12.0",
   "private": true,
   "description": "Local-first energy management and simulation platform.",
   "scripts": {
@@ -23,10 +23,14 @@
   },
   "dependencies": {
     "@hookform/resolvers": "latest",
+    "@prisma/client": "6.16.3",
     "@radix-ui/react-dialog": "latest",
     "@radix-ui/react-dropdown-menu": "latest",
     "@radix-ui/react-slot": "latest",
     "@radix-ui/react-tooltip": "latest",
+    "@react-three/drei": "latest",
+    "@react-three/fiber": "latest",
+    "@react-three/postprocessing": "latest",
     "@studio-freight/lenis": "latest",
     "class-variance-authority": "latest",
     "clsx": "latest",
@@ -36,16 +40,17 @@
     "lucide-react": "latest",
     "next": "latest",
     "next-themes": "latest",
+    "postprocessing": "latest",
     "react": "latest",
     "react-dom": "latest",
     "react-hook-form": "latest",
     "sonner": "latest",
     "split-type": "latest",
     "tailwind-merge": "latest",
+    "three": "latest",
     "vaul": "latest",
     "zod": "latest",
-    "zustand": "latest",
-    "@prisma/client": "6.16.3"
+    "zustand": "latest"
   },
   "devDependencies": {
     "@eslint/eslintrc": "latest",
@@ -53,20 +58,17 @@
     "@types/node": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",
+    "@types/three": "latest",
     "eslint": "latest",
     "eslint-config-next": "latest",
     "postcss": "latest",
     "prettier": "latest",
     "prettier-plugin-tailwindcss": "latest",
-    "tailwindcss": "latest",
-    "typescript": "latest",
     "prisma": "6.16.3",
-    "tsx": "4.20.5"
+    "tailwindcss": "latest",
+    "tsx": "4.20.5",
+    "typescript": "latest"
   },
-  "engines": {
-    "node": ">=20.9.0"
-  },
-  "prisma": {
-    "seed": "tsx prisma/seed.ts"
-  }
+  "engines": { "node": ">=20.9.0" },
+  "prisma": { "seed": "tsx prisma/seed.ts" }
 }
