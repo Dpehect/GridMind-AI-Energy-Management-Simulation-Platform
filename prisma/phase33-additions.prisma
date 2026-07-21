@@ -1,0 +1,69 @@
+// Merge into prisma/schema.prisma.
+
+model RuntimeLog {
+  id            String   @id @default(cuid())
+  workspaceId   String?
+  requestId     String?
+  correlationId String?
+  level         String
+  category      String
+  message       String
+  durationMs    Int?
+  metadata      Json?
+  createdAt     DateTime @default(now())
+
+  @@index([workspaceId, createdAt])
+  @@index([requestId])
+  @@index([correlationId])
+  @@index([level, category, createdAt])
+}
+
+model ErrorIncident {
+  id            String   @id @default(cuid())
+  workspaceId   String?
+  requestId     String?
+  correlationId String?
+  fingerprint   String
+  code          String
+  message       String
+  stack         String?
+  route         String?
+  actorId       String?
+  status        String   @default("open")
+  occurrences   Int      @default(1)
+  firstSeenAt   DateTime @default(now())
+  lastSeenAt    DateTime @default(now())
+  metadata      Json?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@unique([fingerprint])
+  @@index([workspaceId, status, lastSeenAt])
+  @@index([code, status])
+}
+
+model SystemMetric {
+  id          String   @id @default(cuid())
+  workspaceId String?
+  key         String
+  value       Float
+  unit        String
+  metadata    Json?
+  capturedAt  DateTime @default(now())
+
+  @@index([workspaceId, key, capturedAt])
+}
+
+model DiagnosticRun {
+  id          String   @id @default(cuid())
+  workspaceId String?
+  status      String
+  checks      Json
+  startedAt   DateTime @default(now())
+  completedAt DateTime?
+  durationMs  Int?
+  createdAt   DateTime @default(now())
+
+  @@index([workspaceId, createdAt])
+  @@index([status, createdAt])
+}
