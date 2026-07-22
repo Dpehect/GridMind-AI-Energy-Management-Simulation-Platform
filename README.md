@@ -7,21 +7,28 @@
 [![Prisma](https://img.shields.io/badge/Prisma-6.1-2D3748?style=for-the-badge&logo=prisma)](https://www.prisma.io/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4.0-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
 
-**GridMind** is a local-first enterprise energy management and simulation platform designed for smart buildings, commercial campuses, and light industrial facilities. It delivers real-time energy telemetry, interactive 3D digital twins, carbon footprint analytics, and explainable AI recommendations—**100% locally with zero external API dependencies or cloud vendor lock-in.**
+**GridMind** is a local-first enterprise energy management and simulation platform designed for smart buildings, commercial campuses, and light industrial facilities. It delivers real-time energy telemetry, interactive 3D digital twins, carbon footprint analytics, and explainable AI recommendations with zero external API dependencies or cloud vendor lock-in.
 
 ---
 
-## 🚀 Key Technical Highlights
+## Interactive Design Prototype
 
-- **🏢 3D Facility Digital Twin & 2D Energy Map:** Interactive 3D campus visualization powered by React Three Fiber (`@react-three/fiber`) and Three.js, offering exploded floorviews, live thermal heatmaps, and zone-level energy telemetry.
-- **⚡ Explainable Local Intelligence Engine:** Deterministic statistical anomaly detection (Z-score analysis), 24-hour demand forecasting, consumption profiling, and automated recommendation scoring running entirely on the local runtime.
-- **🌿 Cost & Carbon Analytics Engine:** Granular calculation of Scope 1 & Scope 2 carbon emissions ($kg\ CO_2/kWh$), tariff structures (Peak, Off-Peak, Standard), and financial impact tracking.
-- **🧪 Scenario Lab & Peak-Shaving Simulator:** Interactive scenario engine enabling facility managers to model HVAC setbacks, night load reductions, and solar/battery integration ROI before deployment.
-- **🔐 Local-First Privacy & Offline Architecture:** SQLite persistence powered by Prisma ORM. Full privacy compliance—no telemetry or user data leaves the local environment.
+Explore the interactive UX/UI design prototype on UXPin:
+[GridMind UXPin Preview Prototype](https://preview.uxpin.com/e201a549bea281c23ccef40a9bbe7c5767006a39#/pages/225908981?mode=f)
 
 ---
 
-## 🛠️ Tech Stack & Architecture
+## Technical Highlights
+
+- **3D Facility Digital Twin & 2D Energy Map:** Interactive 3D campus visualization powered by React Three Fiber (`@react-three/fiber`) and Three.js, offering exploded floorviews, live thermal heatmaps, and zone-level energy telemetry.
+- **Explainable Local Intelligence Engine:** Deterministic statistical anomaly detection (Z-score analysis), 24-hour demand forecasting, consumption profiling, and automated recommendation scoring running entirely on the local runtime.
+- **Cost & Carbon Analytics Engine:** Granular calculation of Scope 1 & Scope 2 carbon emissions ($kg\ CO_2/kWh$), tariff structures (Peak, Off-Peak, Standard), and financial impact tracking.
+- **Scenario Lab & Peak-Shaving Simulator:** Interactive scenario engine enabling facility managers to model HVAC setbacks, night load reductions, and solar/battery integration ROI before deployment.
+- **Local-First Privacy & Offline Architecture:** SQLite persistence powered by Prisma ORM. Full privacy compliance—no telemetry or user data leaves the local environment.
+
+---
+
+## Tech Stack & Architecture
 
 | Layer | Technology / Tools |
 | :--- | :--- |
@@ -35,7 +42,7 @@
 
 ---
 
-## ⚡ Quick Start
+## Quick Start
 
 ### Prerequisites
 - **Node.js**: `v20.9.0` or higher
@@ -63,7 +70,7 @@ Open `http://localhost:3000` (or `http://localhost:3001`) in your browser.
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 ```text
 ├── src/
@@ -85,14 +92,14 @@ Open `http://localhost:3000` (or `http://localhost:3001`) in your browser.
 
 ---
 
-## 🔒 Security & Performance Standard
+## Security & Performance Standard
 
 - **Zero Third-Party Data Leakage:** All analytics, forecasts, and ML recommendations run synchronously on local node instances.
-- **Production Performance:** Built with Turbopack, static page prerendering (19/19 optimized routes), and optimized dynamic package imports.
+- **Production Performance:** Built with Turbopack, static page prerendering, and optimized dynamic package imports.
 - **Clean Engineering Codebase:** 100% clean TypeScript build (`npm run typecheck`) with zero warnings or errors.
 
 ---
 
-## 📄 License
+## License
 
 Distributed under the [MIT License](LICENSE). Built by **GridMind Engineering**.
