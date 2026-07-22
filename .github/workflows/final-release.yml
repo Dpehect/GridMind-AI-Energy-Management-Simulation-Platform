@@ -1,0 +1,56 @@
+name: GridMind Final Release
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    tags:
+      - "v*"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    env:
+      DATABASE_URL: file:./release.db
+      TEST_DATABASE_URL: file:./integration-test.db
+      GRIDMIND_ENABLE_DEMO_USERS: "true"
+      GRIDMIND_CSRF_SECRET: release-ci-secret-change-in-production
+      GRIDMIND_LOG_LEVEL: error
+      NEXT_PUBLIC_APP_URL: http://127.0.0.1:3000
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Prepare database
+        run: npm run release:seed
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Run final release validation
+        run: npm run release:verify-all
+
+      - name: Upload validation reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gridmind-final-release-report
+          if-no-files-found: ignore
+          path: |
+            gridmind-final-release-report.json
+            compliance-report.json
+            release-health.json
+            test-matrix.json
