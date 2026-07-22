@@ -1,0 +1,1 @@
+export type AssetHealth={id:string;health:number;risk:'low'|'medium'|'high';nextMaintenance:string};

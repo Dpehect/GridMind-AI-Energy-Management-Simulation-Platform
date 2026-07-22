@@ -53,109 +53,24 @@ enum RecommendationStatus {
   COMPLETED
 }
 
-enum WorkOrderStatus {
-  BACKLOG
-  SCHEDULED
-  IN_PROGRESS
-  BLOCKED
-  COMPLETED
-  OVERDUE
-}
-
-enum WorkOrderPriority {
-  LOW
-  MEDIUM
-  HIGH
-  CRITICAL
-}
-
-enum GoalStatus {
-  ON_TRACK
-  AT_RISK
-  BEHIND
-  COMPLETED
-}
-
-model Organization {
+model Workspace {
   id          String   @id @default(cuid())
   name        String
   slug        String   @unique
   description String?
+  timezone    String   @default("Europe/Istanbul")
+  currency    String   @default("TRY")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  workspaces  Workspace[]
-  memberships OrganizationMembership[]
-}
-
-model Workspace {
-  id             String   @id @default(cuid())
-  organizationId String?
-  name           String
-  slug           String   @unique
-  description    String?
-  timezone       String   @default("Europe/Istanbul")
-  currency       String   @default("TRY")
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-
-  organization Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-
-  buildings                 Building[]
-  tariffs                   Tariff[]
-  goals                     EnergyGoal[]
-  scenarios                 Scenario[]
-  recommendations           Recommendation[]
-  reports                   Report[]
-  activityLogs              ActivityLog[]
-  settings                  WorkspaceSetting[]
-  dashboardLayouts          DashboardLayout[]
-  scheduledReports          ScheduledReport[]
-  inventoryItems            InventoryItem[]
-  users                     LocalUser[]
-  entityVersions            EntityVersion[]
-  importJobs                ImportJob[]
-  backupRecords             BackupRecord[]
-  memberships               WorkspaceMembership[]
-  buildingAccess            BuildingAccess[]
-  featureFlags              WorkspaceFeatureFlag[]
-  locale                    WorkspaceLocale?
-  inventoryMovements        InventoryMovement[]
-  purchaseRequests          PurchaseRequest[]
-  recurringMaintenancePlans RecurringMaintenancePlan[]
-  automationRules           AutomationRule[]
-}
-
-model OrganizationMembership {
-  id             String   @id @default(cuid())
-  organizationId String
-  userId         String
-  role           String
-  active         Boolean  @default(true)
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-
-  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  user         LocalUser    @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([organizationId, userId])
-  @@index([userId, active])
-}
-
-model WorkspaceMembership {
-  id          String   @id @default(cuid())
-  workspaceId String
-  userId      String
-  role        String
-  active      Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-  user      LocalUser @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([workspaceId, userId])
-  @@index([userId, active])
+  buildings      Building[]
+  tariffs        Tariff[]
+  goals          EnergyGoal[]
+  scenarios      Scenario[]
+  recommendations Recommendation[]
+  reports        Report[]
+  activityLogs   ActivityLog[]
+  settings       WorkspaceSetting[]
 }
 
 model Building {
@@ -172,35 +87,15 @@ model Building {
   updatedAt   DateTime @updatedAt
   deletedAt   DateTime?
 
-  workspace                 Workspace                  @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-  floors                    Floor[]
-  meters                    Meter[]
-  devices                   Device[]
-  alerts                    Alert[]
-  maintenanceRecords        MaintenanceRecord[]
-  workOrders                WorkOrder[]
-  buildingAccess            BuildingAccess[]
-  recurringMaintenancePlans RecurringMaintenancePlan[]
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  floors    Floor[]
+  meters    Meter[]
+  devices   Device[]
+  alerts    Alert[]
+  maintenanceRecords MaintenanceRecord[]
 
   @@unique([workspaceId, code])
   @@index([workspaceId, isActive])
-  @@index([workspaceId, deletedAt])
-}
-
-model BuildingAccess {
-  id          String   @id @default(cuid())
-  workspaceId String
-  buildingId  String
-  userId      String
-  accessLevel String
-  createdAt   DateTime @default(now())
-
-  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-  building  Building  @relation(fields: [buildingId], references: [id], onDelete: Cascade)
-  user      LocalUser @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([buildingId, userId])
-  @@index([workspaceId, userId])
 }
 
 model Floor {
@@ -239,18 +134,18 @@ model Zone {
 }
 
 model Meter {
-  id           String       @id @default(cuid())
-  buildingId   String
-  zoneId       String?
-  name         String
-  serialNumber String       @unique
-  source       EnergySource @default(GRID)
-  unit         String       @default("kWh")
-  multiplier   Float        @default(1)
-  installedAt  DateTime?
-  isActive     Boolean      @default(true)
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
+  id          String       @id @default(cuid())
+  buildingId  String
+  zoneId      String?
+  name        String
+  serialNumber String      @unique
+  source      EnergySource @default(GRID)
+  unit        String       @default("kWh")
+  multiplier  Float        @default(1)
+  installedAt DateTime?
+  isActive    Boolean      @default(true)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
 
   building Building @relation(fields: [buildingId], references: [id], onDelete: Cascade)
   zone     Zone?    @relation(fields: [zoneId], references: [id], onDelete: SetNull)
@@ -262,29 +157,24 @@ model Meter {
 }
 
 model Device {
-  id                    String       @id @default(cuid())
-  buildingId            String
-  zoneId                String?
-  name                  String
-  assetTag              String       @unique
-  category              String
-  ratedPowerKw          Float
-  status                DeviceStatus @default(ACTIVE)
-  operatingHours        Float        @default(0)
-  installedAt           DateTime?
-  expectedLifeYears     Int?
-  healthScore           Int          @default(100)
-  anomalyCount30d       Int          @default(0)
-  efficiencyLossPercent Float        @default(0)
-  createdAt             DateTime     @default(now())
-  updatedAt             DateTime     @updatedAt
+  id              String       @id @default(cuid())
+  buildingId      String
+  zoneId          String?
+  name            String
+  assetTag        String       @unique
+  category        String
+  ratedPowerKw    Float
+  status          DeviceStatus @default(ACTIVE)
+  operatingHours  Float        @default(0)
+  installedAt     DateTime?
+  expectedLifeYears Int?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
 
-  building                  Building                   @relation(fields: [buildingId], references: [id], onDelete: Cascade)
-  zone                      Zone?                      @relation(fields: [zoneId], references: [id], onDelete: SetNull)
-  alerts                    Alert[]
-  maintenanceRecords        MaintenanceRecord[]
-  workOrders                WorkOrder[]
-  recurringMaintenancePlans RecurringMaintenancePlan[]
+  building Building @relation(fields: [buildingId], references: [id], onDelete: Cascade)
+  zone     Zone?    @relation(fields: [zoneId], references: [id], onDelete: SetNull)
+  alerts   Alert[]
+  maintenanceRecords MaintenanceRecord[]
 
   @@index([buildingId, status])
   @@index([zoneId])
@@ -303,26 +193,25 @@ model Reading {
   meter Meter @relation(fields: [meterId], references: [id], onDelete: Cascade)
 
   @@unique([meterId, capturedAt])
+  @@index([capturedAt])
   @@index([meterId, capturedAt])
-  @@index([capturedAt, value])
 }
 
 model Tariff {
-  id           String   @id @default(cuid())
-  workspaceId  String
-  name         String
-  currency     String   @default("TRY")
-  pricePerKwh  Float
-  peakPrice    Float?
+  id          String   @id @default(cuid())
+  workspaceId String
+  name        String
+  currency    String   @default("TRY")
+  pricePerKwh Float
+  peakPrice   Float?
   offPeakPrice Float?
-  validFrom    DateTime
-  validUntil   DateTime?
-  rules        Json?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  validFrom   DateTime
+  validUntil  DateTime?
+  rules       Json?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-
   @@index([workspaceId, validFrom])
 }
 
@@ -368,119 +257,23 @@ model MaintenanceRecord {
 
   building Building @relation(fields: [buildingId], references: [id], onDelete: Cascade)
   device   Device?  @relation(fields: [deviceId], references: [id], onDelete: SetNull)
-
   @@index([buildingId, scheduledAt])
 }
 
-model WorkOrder {
-  id            String            @id @default(cuid())
-  buildingId    String
-  deviceId      String?
-  title         String
-  description   String?
-  owner         String
-  status        WorkOrderStatus   @default(BACKLOG)
-  priority      WorkOrderPriority @default(MEDIUM)
-  startsAt      DateTime
-  endsAt        DateTime
-  estimatedCost Float             @default(0)
-  actualCost    Float?
-  checklist     Json?
-  outcome       String?
-  createdAt     DateTime          @default(now())
-  updatedAt     DateTime          @updatedAt
-
-  building   Building              @relation(fields: [buildingId], references: [id], onDelete: Cascade)
-  device     Device?               @relation(fields: [deviceId], references: [id], onDelete: SetNull)
-  comments   WorkOrderComment[]
-  attachments WorkOrderAttachment[]
-  movements  InventoryMovement[]
-
-  @@index([buildingId, status, priority])
-  @@index([startsAt, endsAt])
-  @@index([deviceId, status])
-}
-
-model WorkOrderComment {
-  id          String   @id @default(cuid())
-  workOrderId String
-  authorId    String?
-  authorName  String
-  body        String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  workOrder WorkOrder @relation(fields: [workOrderId], references: [id], onDelete: Cascade)
-
-  @@index([workOrderId, createdAt])
-}
-
-model WorkOrderAttachment {
-  id          String   @id @default(cuid())
-  workOrderId String
-  fileName    String
-  mimeType    String
-  sizeBytes   Int
-  storagePath String
-  checksum    String
-  uploadedBy  String
-  createdAt   DateTime @default(now())
-
-  workOrder WorkOrder @relation(fields: [workOrderId], references: [id], onDelete: Cascade)
-
-  @@index([workOrderId, createdAt])
-}
-
 model EnergyGoal {
-  id          String     @id @default(cuid())
+  id          String   @id @default(cuid())
   workspaceId String
   name        String
   metric      String
   baseline    Float
   target      Float
-  current     Float
-  unit        String
-  owner       String
-  status      GoalStatus @default(ON_TRACK)
   startsAt    DateTime
   endsAt      DateTime
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-
-  workspace       Workspace           @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-  milestones      GoalMilestone[]
-  progressEntries GoalProgressEntry[]
-
-  @@index([workspaceId, status, endsAt])
-}
-
-model GoalMilestone {
-  id          String   @id @default(cuid())
-  goalId      String
-  title       String
-  targetValue Float
-  dueDate     DateTime
-  status      String   @default("planned")
-  completedAt DateTime?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  goal EnergyGoal @relation(fields: [goalId], references: [id], onDelete: Cascade)
-
-  @@index([goalId, dueDate])
-}
-
-model GoalProgressEntry {
-  id         String   @id @default(cuid())
-  goalId     String
-  value      Float
-  note       String?
-  recordedBy String
-  recordedAt DateTime @default(now())
-
-  goal EnergyGoal @relation(fields: [goalId], references: [id], onDelete: Cascade)
-
-  @@index([goalId, recordedAt])
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  @@index([workspaceId, endsAt])
 }
 
 model Scenario {
@@ -495,7 +288,6 @@ model Scenario {
 
   workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   runs      SimulationRun[]
-
   @@index([workspaceId, status])
 }
 
@@ -514,47 +306,27 @@ model SimulationRun {
   errorMessage   String?
 
   scenario Scenario @relation(fields: [scenarioId], references: [id], onDelete: Cascade)
-
   @@index([scenarioId, startedAt])
 }
 
 model Recommendation {
-  id                   String               @id @default(cuid())
-  workspaceId          String
-  title                String
-  summary              String
-  category             String
-  impactScore          Float
-  effortScore          Float
-  confidence           Float
-  estimatedSavingsKwh  Float?
+  id          String               @id @default(cuid())
+  workspaceId String
+  title       String
+  summary     String
+  category    String
+  impactScore Float
+  effortScore Float
+  confidence  Float
+  estimatedSavingsKwh Float?
   estimatedSavingsCost Float?
-  status               RecommendationStatus @default(NEW)
-  evidence             Json?
-  createdAt            DateTime             @default(now())
-  updatedAt            DateTime             @updatedAt
+  status      RecommendationStatus @default(NEW)
+  evidence    Json?
+  createdAt   DateTime             @default(now())
+  updatedAt   DateTime             @updatedAt
 
-  workspace   Workspace    @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-  actionItems ActionItem[]
-
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   @@index([workspaceId, status, impactScore])
-}
-
-model ActionItem {
-  id                 String   @id @default(cuid())
-  recommendationId   String
-  title              String
-  owner              String
-  dueDate            DateTime
-  status             String   @default("backlog")
-  expectedSavingsKwh Float    @default(0)
-  realizedSavingsKwh Float    @default(0)
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
-
-  recommendation Recommendation @relation(fields: [recommendationId], references: [id], onDelete: Cascade)
-
-  @@index([recommendationId, status])
 }
 
 model Report {
@@ -566,189 +338,11 @@ model Report {
   periodEnd   DateTime
   status      String   @default("draft")
   content     Json
-  version     Int      @default(1)
-  building    String   @default("All buildings")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  workspace Workspace        @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-  approvals ReportApproval[]
-
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   @@index([workspaceId, createdAt])
-}
-
-model ReportApproval {
-  id         String   @id @default(cuid())
-  reportId   String
-  reviewerId String?
-  reviewer   String
-  decision   String
-  comment    String?
-  createdAt  DateTime @default(now())
-
-  report Report @relation(fields: [reportId], references: [id], onDelete: Cascade)
-
-  @@index([reportId, createdAt])
-}
-
-model DashboardLayout {
-  id          String   @id @default(cuid())
-  workspaceId String
-  name        String
-  widgets     Json
-  isDefault   Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-
-  @@index([workspaceId, isDefault])
-}
-
-model ScheduledReport {
-  id          String   @id @default(cuid())
-  workspaceId String
-  name        String
-  cadence     String
-  format      String
-  nextRunAt   DateTime
-  enabled     Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-
-  @@index([workspaceId, enabled, nextRunAt])
-}
-
-model InventoryItem {
-  id           String   @id @default(cuid())
-  workspaceId  String
-  sku          String
-  name         String
-  category     String
-  quantity     Int      @default(0)
-  reorderPoint Int      @default(0)
-  unitCost     Float    @default(0)
-  location     String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-
-  workspace Workspace          @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-  movements InventoryMovement[]
-
-  @@unique([workspaceId, sku])
-  @@index([workspaceId, quantity, reorderPoint])
-}
-
-model InventoryMovement {
-  id              String   @id @default(cuid())
-  workspaceId     String
-  inventoryItemId String
-  workOrderId     String?
-  type            String
-  quantity        Int
-  unitCost        Float
-  reference       String?
-  actor           String
-  createdAt       DateTime @default(now())
-
-  workspace     Workspace     @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-  inventoryItem InventoryItem @relation(fields: [inventoryItemId], references: [id], onDelete: Restrict)
-  workOrder     WorkOrder?    @relation(fields: [workOrderId], references: [id], onDelete: SetNull)
-
-  @@index([workspaceId, createdAt])
-  @@index([inventoryItemId, createdAt])
-  @@index([workOrderId, createdAt])
-}
-
-model PurchaseRequest {
-  id            String   @id @default(cuid())
-  workspaceId   String
-  requestedBy   String
-  status        String   @default("draft")
-  justification String
-  totalCost     Float    @default(0)
-  approvedBy    String?
-  approvedAt    DateTime?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  workspace Workspace             @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-  items     PurchaseRequestItem[]
-
-  @@index([workspaceId, status, createdAt])
-}
-
-model PurchaseRequestItem {
-  id                String   @id @default(cuid())
-  purchaseRequestId String
-  inventoryItemId   String?
-  description       String
-  quantity          Int
-  estimatedUnitCost Float
-  createdAt         DateTime @default(now())
-
-  purchaseRequest PurchaseRequest @relation(fields: [purchaseRequestId], references: [id], onDelete: Cascade)
-
-  @@index([purchaseRequestId])
-}
-
-model RecurringMaintenancePlan {
-  id          String   @id @default(cuid())
-  workspaceId String
-  buildingId  String
-  deviceId    String?
-  title       String
-  cadence     String
-  interval    Int      @default(1)
-  nextRunAt   DateTime
-  enabled     Boolean  @default(true)
-  owner       String
-  checklist   Json?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-  building  Building  @relation(fields: [buildingId], references: [id], onDelete: Cascade)
-  device    Device?   @relation(fields: [deviceId], references: [id], onDelete: SetNull)
-
-  @@index([workspaceId, enabled, nextRunAt])
-}
-
-model LocalUser {
-  id           String   @id @default(cuid())
-  workspaceId  String
-  name         String
-  email        String
-  passwordHash String
-  role         String
-  active       Boolean  @default(true)
-  lastSeenAt   DateTime?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-
-  workspace               Workspace                @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-  sessions                LocalSession[]
-  organizationMemberships OrganizationMembership[]
-  workspaceMemberships    WorkspaceMembership[]
-  buildingAccess          BuildingAccess[]
-
-  @@unique([workspaceId, email])
-  @@index([workspaceId, active])
-}
-
-model LocalSession {
-  id        String   @id @default(cuid())
-  userId    String
-  tokenHash String   @unique
-  expiresAt DateTime
-  createdAt DateTime @default(now())
-  revokedAt DateTime?
-
-  user LocalUser @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@index([userId, expiresAt])
 }
 
 model ActivityLog {
@@ -762,7 +356,6 @@ model ActivityLog {
   createdAt   DateTime @default(now())
 
   workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-
   @@index([workspaceId, createdAt])
 }
 
@@ -775,262 +368,5 @@ model WorkspaceSetting {
   updatedAt   DateTime @updatedAt
 
   workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-
   @@unique([workspaceId, key])
-}
-
-model EntityVersion {
-  id          String   @id @default(cuid())
-  workspaceId String
-  entityType  String
-  entityId    String
-  version     Int
-  snapshot    Json
-  actor       String
-  createdAt   DateTime @default(now())
-
-  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-
-  @@unique([entityType, entityId, version])
-  @@index([workspaceId, entityType, entityId])
-}
-
-model ImportJob {
-  id            String   @id @default(cuid())
-  workspaceId   String
-  fileName      String
-  fileHash      String
-  status        String   @default("pending")
-  totalRows     Int      @default(0)
-  acceptedRows  Int      @default(0)
-  rejectedRows  Int      @default(0)
-  duplicateRows Int      @default(0)
-  errorSummary  Json?
-  startedAt     DateTime?
-  completedAt   DateTime?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-  rows      ImportRow[]
-
-  @@unique([workspaceId, fileHash])
-  @@index([workspaceId, status, createdAt])
-}
-
-model ImportRow {
-  id          String   @id @default(cuid())
-  importJobId String
-  rowNumber   Int
-  rowHash     String
-  status      String
-  payload     Json
-  error       String?
-  createdAt   DateTime @default(now())
-
-  importJob ImportJob @relation(fields: [importJobId], references: [id], onDelete: Cascade)
-
-  @@unique([importJobId, rowNumber])
-  @@index([rowHash])
-}
-
-model BackupRecord {
-  id             String   @id @default(cuid())
-  workspaceId    String
-  fileName       String
-  filePath       String
-  checksumSha256 String
-  sizeBytes      Int
-  status         String   @default("created")
-  verifiedAt     DateTime?
-  createdAt      DateTime @default(now())
-
-  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-
-  @@index([workspaceId, createdAt])
-}
-
-model LoginAttempt {
-  id         String   @id @default(cuid())
-  email      String
-  ipAddress  String?
-  userAgent  String?
-  successful Boolean  @default(false)
-  createdAt  DateTime @default(now())
-
-  @@index([email, createdAt])
-  @@index([ipAddress, createdAt])
-}
-
-model SecurityEvent {
-  id          String   @id @default(cuid())
-  workspaceId String?
-  userId      String?
-  type        String
-  severity    String
-  ipAddress   String?
-  userAgent   String?
-  metadata    Json?
-  createdAt   DateTime @default(now())
-
-  @@index([workspaceId, createdAt])
-  @@index([userId, createdAt])
-  @@index([type, severity, createdAt])
-}
-
-model WorkspaceFeatureFlag {
-  id          String   @id @default(cuid())
-  workspaceId String
-  key         String
-  enabled     Boolean  @default(false)
-  config      Json?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-
-  @@unique([workspaceId, key])
-}
-
-model WorkspaceLocale {
-  id          String   @id @default(cuid())
-  workspaceId String   @unique
-  locale      String   @default("tr-TR")
-  timezone    String   @default("Europe/Istanbul")
-  currency    String   @default("TRY")
-  unitSystem  String   @default("metric")
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-}
-
-model RuntimeLog {
-  id            String   @id @default(cuid())
-  workspaceId   String?
-  requestId     String?
-  correlationId String?
-  level         String
-  category      String
-  message       String
-  durationMs    Int?
-  metadata      Json?
-  createdAt     DateTime @default(now())
-
-  @@index([workspaceId, level, createdAt])
-  @@index([requestId])
-  @@index([correlationId])
-  @@index([category, createdAt])
-}
-
-model ErrorIncident {
-  id            String   @id @default(cuid())
-  workspaceId   String?
-  requestId     String?
-  correlationId String?
-  fingerprint   String
-  code          String
-  message       String
-  stack         String?
-  route         String?
-  actorId       String?
-  status        String   @default("open")
-  occurrences   Int      @default(1)
-  firstSeenAt   DateTime @default(now())
-  lastSeenAt    DateTime @default(now())
-  metadata      Json?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  @@unique([fingerprint])
-  @@index([workspaceId, status, lastSeenAt])
-  @@index([code, status])
-}
-
-model SystemMetric {
-  id          String   @id @default(cuid())
-  workspaceId String?
-  key         String
-  value       Float
-  unit        String
-  metadata    Json?
-  capturedAt  DateTime @default(now())
-
-  @@index([workspaceId, key, capturedAt])
-}
-
-model DiagnosticRun {
-  id          String   @id @default(cuid())
-  workspaceId String?
-  status      String
-  checks      Json
-  startedAt   DateTime @default(now())
-  completedAt DateTime?
-  durationMs  Int?
-  createdAt   DateTime @default(now())
-
-  @@index([workspaceId, createdAt])
-  @@index([status, createdAt])
-}
-
-model BackgroundJob {
-  id             String   @id @default(cuid())
-  workspaceId    String?
-  type           String
-  payload        Json
-  status         String   @default("queued")
-  priority       Int      @default(100)
-  attempts       Int      @default(0)
-  maxAttempts    Int      @default(5)
-  runAt          DateTime @default(now())
-  lockedAt       DateTime?
-  lockedBy       String?
-  startedAt      DateTime?
-  completedAt    DateTime?
-  failedAt       DateTime?
-  lastError      String?
-  result         Json?
-  idempotencyKey String?  @unique
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-
-  attemptsHistory JobAttempt[]
-
-  @@index([status, runAt, priority])
-  @@index([workspaceId, status, createdAt])
-}
-
-model JobAttempt {
-  id              String   @id @default(cuid())
-  backgroundJobId String
-  attempt         Int
-  workerId        String
-  startedAt       DateTime @default(now())
-  completedAt     DateTime?
-  status          String
-  error           String?
-  durationMs      Int?
-
-  backgroundJob BackgroundJob @relation(fields: [backgroundJobId], references: [id], onDelete: Cascade)
-
-  @@index([backgroundJobId, attempt])
-}
-
-model AutomationRule {
-  id          String   @id @default(cuid())
-  workspaceId String
-  name        String
-  triggerType String
-  trigger     Json
-  actionType  String
-  action      Json
-  enabled     Boolean  @default(true)
-  lastRunAt   DateTime?
-  nextRunAt   DateTime?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-
-  @@index([workspaceId, enabled, nextRunAt])
 }
