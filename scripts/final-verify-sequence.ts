@@ -1,6 +1,6 @@
 import { spawnSync } from "node:child_process";
 
-const commands = [
+const steps = [
   ["npm", ["run", "env:validate"]],
   ["npm", ["run", "audit:schema"]],
   ["npm", ["run", "check:routes"]],
@@ -15,7 +15,7 @@ const commands = [
   ["npm", ["run", "release:validate"]]
 ] as const;
 
-for (const [command, args] of commands) {
+for (const [command, args] of steps) {
   const result = spawnSync(command, args, {
     stdio: "inherit",
     shell: process.platform === "win32"

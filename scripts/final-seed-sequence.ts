@@ -1,6 +1,6 @@
 import { spawnSync } from "node:child_process";
 
-const commands = [
+const steps = [
   ["npm", ["run", "db:generate"]],
   ["npm", ["run", "db:push"]],
   ["npm", ["run", "db:seed"]],
@@ -9,7 +9,7 @@ const commands = [
   ["npm", ["run", "db:seed:workflows"]]
 ] as const;
 
-for (const [command, args] of commands) {
+for (const [command, args] of steps) {
   const result = spawnSync(command, args, {
     stdio: "inherit",
     shell: process.platform === "win32"
